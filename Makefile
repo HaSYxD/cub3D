@@ -11,7 +11,10 @@
 # **************************************************************************** #
 
 NAME	= cub3D
-SRC		= src/main.c
+SRC		= src/main.c\
+		  src/drawing/drawing.c\
+		  src/drawing/drawing_utils.c\
+		  src/math/cub_math.c
 OBJS	= $(SRC:.c=.o)
 CC		= cc
 RM		= rm -f
@@ -23,12 +26,12 @@ clone:
 	@if ! test -d ./libs/minilibx-linux; then\
 		cd libs;git clone git@github.com:42Paris/minilibx-linux.git;\
 	fi
-%.o: %.c
-	${CC} ${CFLAGS} ${INCLUDES} ${LIBS} -c $< -o $@
 $(NAME): ${OBJS}
 	@cd libs/libft;make
 	@cd libs/minilibx-linux;make
 	${CC} ${OBJS} -o ${NAME} ${CFLAGS} ${INCLUDES} ${LIBS}
+%.o: %.c
+	${CC} ${CFLAGS} ${INCLUDES} ${LIBS} -c $< -o $@
 clean:
 	@cd libs/libft;make clean
 	@if test -d ./libs/minilibx-linux; then\
