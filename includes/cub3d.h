@@ -76,7 +76,7 @@ typedef struct s_button
 	t_color	on_color;
 	t_color	off_color;
 	t_rec	body;
-	bool	state;
+	int	state;
 }	t_button;
 //------------------------//
 
@@ -89,6 +89,7 @@ typedef struct s_data
 	t_img	creeper;
 	void	*mlx;
 	void	*win;
+	int	mouse_state;
 }	t_data;
 //general cub3D datas
 //------------------------//
@@ -116,7 +117,7 @@ int	check_collision_point_rec(t_rec rec, t_vec2 point);
 //collision functions
 
 t_button	get_button(t_rec body, t_color on_color, t_color off_color);
-void			update_button(t_button *button, t_data *data);
+void			update_button(t_button *button, int new_state, t_data *data);
 void			draw_button(t_button button, t_data *data);
 //ui functions
 //------------------------//

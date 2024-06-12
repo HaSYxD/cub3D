@@ -6,14 +6,14 @@ t_button	get_button(t_rec body, t_color on_color, t_color off_color)
 		.on_color = on_color,
 		.off_color = off_color,
 		.body = body,
-		.state = false
+		.state = 0
 	});
 }
 
-void	update_button(t_button *button, t_data *data)
+void	update_button(t_button *button, int new_state, t_data *data)
 {
 	if (check_collision_point_rec(button->body, data->mouse_position))
-		button->state = true;
+		button->state = new_state;
 
 }
 
