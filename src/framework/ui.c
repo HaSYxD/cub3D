@@ -12,7 +12,7 @@ t_button	get_button(t_rec body, t_color on_color, t_color off_color)
 
 void	update_button(t_button *button, int new_state, t_data *data)
 {
-	if (check_collision_point_rec(button->body, data->mouse_position))
+	if (check_collision_point_rec(button->body, data->mouse_position) && data->mouse_state == 1)
 		button->state = new_state;
 
 }

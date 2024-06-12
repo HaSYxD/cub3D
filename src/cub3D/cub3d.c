@@ -63,7 +63,7 @@ static int	render(t_data *data)
 	return (0);
 }
 
-static void	cub_loop(t_data *data)
+void	cub_loop(t_data *data)
 {
 	int		w = 128;
 	int		h = 128;
@@ -83,15 +83,14 @@ int	main(int argc, char *argv[])
 {
 	t_data	data;
 
-	data = (t_data){0};
 	if (argc >= 2)
 	{
 		if (cub_init(&data) != 0)
 			cub_exit(&data, EXIT_FAILURE);
 		if ((ft_strncmp(argv[1], "EDITOR", 6) == 0) && argc == 3)
 			editor_loop(&data, argv);
-		else if ((ft_strncmp(argv[1], "EDITOR", 6) != 0) && argc == 2)
-			cub_loop(&data);
+		//else if ((ft_strncmp(argv[1], "EDITOR", 6) != 0) && argc == 2)
+		//	cub_loop(&data);
 		//cub_exit(&data, 0);
 	}
 	return (0);

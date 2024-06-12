@@ -20,10 +20,21 @@ static int	render(t_data *data)
 	return (0);
 }
 
-int	mouse_hook(int mouse_code, t_data *data)
+int	mouse_press(int mouse_code, int x, int y, t_data *data)
 {
+	(void)x;
+	(void)y;
 	if (mouse_code == 1)
-		data->mouse_state = 0;
+		data->mouse_state = mouse_code;
+	return (0);
+}
+
+int	mouse_release(int mouse_code, int x, int y, t_data *data)
+{
+	(void)mouse_code;
+	(void)x;
+	(void)y;
+	data->mouse_state = 0;
 	return (0);
 }
 
@@ -47,6 +58,7 @@ void	editor_loop(t_data *data, char *argv[])
 		grid[c.i] = get_button((t_rec){(c.i%c.j*scale) + xoffset, (c.i/c.j*scale), scale-1, scale-1},
 				(t_color){255, 255, 255, 255}, (t_color){255, 50, 50, 50});
 	mlx_loop_hook(data->mlx, &render, data);
-	mlx_mouse_hook(data->win, mouse_hook, data);
+	mlx_hook(data->win, ButtonPress, ButtonPressMask, mouse_press, data);
+	mlx_hook(data->win, ButtonRelease, ButtonReleaseMask, mouse_release, data);
 	mlx_loop(data->mlx);
 }
