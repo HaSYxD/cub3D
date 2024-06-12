@@ -14,10 +14,10 @@
 
 static int	cub_exit(t_data *data, int exit_status)
 {
-	if (data->frame_buffer.img)
-		mlx_destroy_image(data->mlx, data->frame_buffer.img);
 	if (data->win)
 		mlx_destroy_window(data->mlx, data->win);
+	if (data->frame_buffer.img)
+		mlx_destroy_image(data->mlx, data->frame_buffer.img);
 	if (data->mlx)
 	{
 		mlx_destroy_display(data->mlx);
@@ -31,6 +31,7 @@ static int	cub_init(t_data *data)
 	int	init_status;
 
 	init_status = 0;
+	data->s_time = ft_gettime();
 	data->mlx = mlx_init();
 	if (!data->mlx)
 		init_status = EXIT_FAILURE;
@@ -50,33 +51,48 @@ static int	cub_init(t_data *data)
 	return (init_status);
 }
 
-static void	cub_loop(t_data *data)
-{
-	t_img	creeper;
-	int		w = 800;
-	int		h = 600;
 
-	creeper.img = mlx_xpm_file_to_image(data->mlx, "./assets/creeper.xpm", &w, &h);
-	if (!creeper.img)
-		cub_exit(data, 1);
-	creeper.addr = mlx_get_data_addr(creeper.img, &creeper.bpp,
-			&creeper.line_length, &creeper.endian);
-	image_to_fbuff(&data->frame_buffer, &creeper, (t_vec2){w, h}, (t_vec2){0, 200});
-	square_to_fbuff(&data->frame_buffer, (t_vec2){20, 20}, (t_vec2){50, 50}, (t_color){255, 255, 0, 0});
-	circle_to_fbuff(&data->frame_buffer, (t_vec2){200, 200}, 100, (t_color){255, 255, 0, 0});
+static int	render(t_data *data)
+{
+	//image_to_fbuff(&data->frame_buffer, &data->creeper, (t_vec2){w, h}, (t_vec2){100, 100});
+	// for (int i = 0; i < 20; i++)
+		// for (int j = 0; j < 20; j++)
+	//square_to_fbuff(&data->frame_buffer, (t_vec2){0, 0}, (t_vec2){WIN_W, WIN_H}, (t_color){255, 255, 0, 0});
 	mlx_put_image_to_window(data->mlx, data->win, data->frame_buffer.img, 0, 0);
-	//***Retire la loop pour check les leak sans ctrl-c***
-	mlx_loop(data->mlx);
-	mlx_destroy_image(data->mlx, creeper.img);
+	print_fps_to_consol();
+	return (0);
 }
 
-int	main(void)
+static void	cub_loop(t_data *data)
+{
+	int		w = 128;
+	int		h = 128;
+	data->creeper.img = mlx_xpm_file_to_image(data->mlx, "./assets/creeper.xpm", &w, &h);
+	if (!data->creeper.img)
+		cub_exit(data, 1);
+	data->creeper.addr = mlx_get_data_addr(data->creeper.img, &data->creeper.bpp,
+			&data->creeper.line_length, &data->creeper.endian);
+	//***Retire la loop pour check les leak sans ctrl-c***
+	mlx_hook(data->win, DestroyNotify, StructureNotifyMask, cub_exit, &data);
+	mlx_loop_hook(data->mlx, &render, data);
+	mlx_loop(data->mlx);
+	//mlx_destroy_image(data->mlx, data->creeper.img);
+}
+
+int	main(int argc, char *argv[])
 {
 	t_data	data;
 
 	data = (t_data){0};
-	if (cub_init(&data) != 0)
-		cub_exit(&data, EXIT_FAILURE);
-	cub_loop(&data);
-	cub_exit(&data, 0);
+	if (argc >= 2)
+	{
+		if (cub_init(&data) != 0)
+			cub_exit(&data, EXIT_FAILURE);
+		if ((ft_strncmp(argv[1], "EDITOR", 6) == 0) && argc == 3)
+			editor_loop(&data, argv);
+		else if ((ft_strncmp(argv[1], "EDITOR", 6) != 0) && argc == 2)
+			cub_loop(&data);
+		//cub_exit(&data, 0);
+	}
+	return (0);
 }

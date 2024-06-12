@@ -29,11 +29,11 @@ void	square_to_fbuff(t_img *fbuff, t_vec2 pos, t_vec2 size, t_color col)
 	t_vec2	pos_buff;
 
 	pos_buff = (t_vec2){pos.x - 1, pos.y - 1};
-	while (++pos.x < (pos_buff.x + size.x))
+	while (++pos.y < (pos_buff.y + size.y))
 	{
-		while (++pos.y < (pos_buff.y + size.y))
+		while (++pos.x < (pos_buff.x + size.x))
 			pixel_to_fbuff(fbuff, pos, col);
-		pos.y = pos_buff.y;
+		pos.x = pos_buff.x;
 	}
 }
 
@@ -57,10 +57,14 @@ void	image_to_fbuff(t_img *fbuff, t_img *img, t_vec2 size, t_vec2 pos)
 {
 	char	*pixel;
 	int		i;
+	int		limit;
 
 	i = -1;
-	while (++i < (size.x * size.y) * (img->bpp / 8))
+	limit = (size.x * size.y) * (img->bpp / 8);
+	while (++i < limit)
 	{
+		if (!img->addr[i] && i > 0 && !img->addr[i - 1])
+			continue ;
 		pixel = fbuff->addr + (int)(fbuff->line_length
 				* ((i / img->line_length) + pos.y)
 				+ ((i % img->line_length) + pos.x));

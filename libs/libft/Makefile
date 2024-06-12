@@ -37,6 +37,7 @@ SRC = ft_isalpha.c\
       ft_domstr.c\
       ft_close.c\
       ft_free.c\
+      ft_gettime.c\
       gnl.c\
       gnl_utils.c\
       garbage_collector.c

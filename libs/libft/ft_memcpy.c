@@ -23,8 +23,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	i = 0;
 	if (!buff_src && !buff_dest)
 		return (NULL);
-	printf("la taile de ma bite %ld\n", n);
-	while (i < n && buff_src[i])
+	while (i < n)
 	{
 		buff_dest[i] = buff_src[i];
 		i++;

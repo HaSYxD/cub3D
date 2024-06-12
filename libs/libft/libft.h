@@ -17,10 +17,12 @@
 #  define GNL_BUFFER_SIZE	16
 # endif
 
+# include <sys/time.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdarg.h>
 # include <fcntl.h>
+# include <stdbool.h>
 
 # include "libgc.h"
 
@@ -29,6 +31,8 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }		t_list;
+
+double	ft_gettime(void);
 
 size_t	ft_gnlstrlen(const char *str);
 char	*ft_gnlstrjoin(char *s1, char *s2, t_garb *gc);

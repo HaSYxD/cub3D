@@ -11,14 +11,18 @@
 # **************************************************************************** #
 
 NAME	= cub3D
-SRC		= src/main.c\
-		  src/drawing/drawing.c\
-		  src/drawing/drawing_utils.c\
-		  src/math/cub_math.c
+SRC		= src/cub3D/cub3d.c\
+		  src/editor/editor.c\
+		  src/framework/ui.c\
+		  src/framework/collision.c\
+		  src/framework/monitoring.c\
+		  src/framework/drawing/drawing.c\
+		  src/framework/drawing/drawing_utils.c\
+		  src/framework/math/cub_math.c
 OBJS	= $(SRC:.c=.o)
 CC		= cc
 RM		= rm -f
-CFLAGS	= -Wall -Werror -Wextra -g
+CFLAGS	= -Wall -Werror -Wextra -g -O3
 LIBS = -Llibs/libft -lft -Llibs/minilibx-linux -lmlx_Linux -lm -lXext -lX11 -lz
 INCLUDES = -I./includes -I./libs/libft -I./libs/minilibx-linux
 all: clone ${NAME}
