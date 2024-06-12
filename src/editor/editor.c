@@ -55,8 +55,7 @@ void	editor_loop(t_data *data, char *argv[])
 	scale = WIN_H / (c.j * (WIN_H / 451));
 	xoffset = (WIN_W - WIN_H) / 2;
 	while (++c.i < grid_size)
-		grid[c.i] = get_button((t_rec){(c.i%c.j*scale) + xoffset, (c.i/c.j*scale), scale-1, scale-1},
-				(t_color){255, 255, 255, 255}, (t_color){255, 50, 50, 50});
+		grid[c.i] = get_button((t_rec){(c.i%c.j*scale) + xoffset, (c.i/c.j*scale), scale-1, scale-1});
 	mlx_loop_hook(data->mlx, &render, data);
 	mlx_hook(data->win, ButtonPress, ButtonPressMask, mouse_press, data);
 	mlx_hook(data->win, ButtonRelease, ButtonReleaseMask, mouse_release, data);

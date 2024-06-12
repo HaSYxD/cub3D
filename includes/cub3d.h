@@ -28,6 +28,15 @@
 //------------------------//
 
 //FRAMEWORK TYPES---------//
+
+# define MLX_RED	(struct s_color){255, 255, 0, 0}
+# define MLX_GREEN	(struct s_color){255, 0, 255, 0}
+# define MLX_BLUE	(struct s_color){255, 0, 0, 255}
+# define MLX_WHITE	(struct s_color){255, 255, 255, 255}
+# define MLX_LGRAY	(struct s_color){255, 150, 150, 150}
+# define MLX_DGRAY	(struct s_color){255, 50, 50, 50}
+# define MLX_BLACK	(struct s_color){255, 0, 0, 0}
+
 typedef struct s_count
 {
 	int	i;
@@ -73,8 +82,6 @@ typedef struct s_img
 
 typedef struct s_button
 {
-	t_color	on_color;
-	t_color	off_color;
 	t_rec	body;
 	int	state;
 }	t_button;
@@ -83,12 +90,12 @@ typedef struct s_button
 //GENERAL DATAS-----------//
 typedef struct s_data
 {
-	size_t	s_time;
-	t_vec2	mouse_position;
-	t_img	frame_buffer;
 	t_img	creeper;
+	t_img	frame_buffer;
 	void	*mlx;
 	void	*win;
+	size_t	s_time;
+	t_vec2	mouse_position;
 	int	mouse_state;
 }	t_data;
 //general cub3D datas
@@ -116,7 +123,7 @@ void	print_fps_to_consol(void);
 int	check_collision_point_rec(t_rec rec, t_vec2 point);
 //collision functions
 
-t_button	get_button(t_rec body, t_color on_color, t_color off_color);
+t_button	get_button(t_rec body);
 void			update_button(t_button *button, int new_state, t_data *data);
 void			draw_button(t_button button, t_data *data);
 //ui functions
