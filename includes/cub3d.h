@@ -25,66 +25,8 @@
 # include <libft.h>
 # include <math.h>
 # include <mlx.h>
-//------------------------//
 
-//FRAMEWORK TYPES---------//
-
-# define MLX_RED	(struct s_color){255, 255, 0, 0}
-# define MLX_GREEN	(struct s_color){255, 0, 255, 0}
-# define MLX_BLUE	(struct s_color){255, 0, 0, 255}
-# define MLX_WHITE	(struct s_color){255, 255, 255, 255}
-# define MLX_LGRAY	(struct s_color){255, 150, 150, 150}
-# define MLX_DGRAY	(struct s_color){255, 50, 50, 50}
-# define MLX_BLACK	(struct s_color){255, 0, 0, 0}
-
-typedef struct s_count
-{
-	int	i;
-	int	j;
-	int	k;
-}	t_count;
-//to use when multiple counter variales are needed (save lines)
-
-typedef struct s_vec2
-{
-	float	x;
-	float	y;
-}	t_vec2;
-//to use when working with 2D coordonnates or sizes
-
-typedef struct s_rec
-{
-	float	x;
-	float	y;
-	int	width;
-	int	height;
-}	t_rec;
-//to use for representing any rectangle in memory
-
-typedef struct s_color
-{
-	unsigned char	a;
-	unsigned char	r;
-	unsigned char	g;
-	unsigned char	b;
-}	t_color;
-//to use when working with colors
-
-typedef struct s_img
-{
-	void	*img;
-	char	*addr;
-	int		bpp;
-	int		line_length;
-	int		endian;
-}	t_img;
-//standard components needed for mlx images
-
-typedef struct s_button
-{
-	t_rec	body;
-	int	state;
-}	t_button;
+# include "cub3d_int.h"
 //------------------------//
 
 //GENERAL DATAS-----------//
@@ -97,11 +39,11 @@ typedef struct s_data
 	size_t	s_time;
 	t_vec2	mouse_position;
 	int	mouse_state;
+	int	key_state[2];
 }	t_data;
 //general cub3D datas
 //------------------------//
 void	editor_loop(t_data *data, char *argv[]);
-
 
 //FRAMEWORK FUNTIONS------//
 t_color	int_to_color(int col);
@@ -112,7 +54,7 @@ float	vec2_dst(t_vec2 point, t_vec2 c_pos);
 //math functions
 
 void	circle_to_fbuff(t_img *fbuff, t_vec2 pos, float radius, t_color col);
-void	square_to_fbuff(t_img *fbuff, t_vec2 pos, t_vec2 size, t_color col);
+void	square_to_fbuff(t_img *fbuff, t_rec rec, t_color col);
 void	pixel_to_fbuff(t_img *fbuff, t_vec2 pos, t_color col);
 void	image_to_fbuff(t_img *fbuff, t_img *img, t_vec2 size, t_vec2 pos);
 //drawing functions
@@ -123,10 +65,19 @@ void	print_fps_to_consol(void);
 int	check_collision_point_rec(t_rec rec, t_vec2 point);
 //collision functions
 
-t_button	get_button(t_rec body);
+t_button	get_button(t_rec body, char *title, int type);
 void			update_button(t_button *button, int new_state, t_data *data);
 void			draw_button(t_button button, t_data *data);
+t_txtbox	get_txtbox(t_rec body, char *title);
+void			update_txtbox(t_txtbox *txtbox, t_data *data);
+void			draw_txtbox(t_txtbox txtbox, t_data *data);
 //ui functions
+
+int	mouse_press(int mouse_code, int x, int y, t_data *data);
+int	mouse_release(int mouse_code, int x, int y, t_data *data);
+int	key_press(int key_code, t_data *data);
+int	key_release(int key_code, t_data *data);
+//input	handlingfunctions
 //------------------------//
 
 #endif

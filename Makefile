@@ -13,9 +13,11 @@
 NAME	= cub3D
 SRC		= src/cub3D/cub3d.c\
 		  src/editor/editor.c\
-		  src/framework/ui.c\
+		  src/framework/inputs.c\
 		  src/framework/collision.c\
 		  src/framework/monitoring.c\
+		  src/framework/ui/button.c\
+		  src/framework/ui/txt_box.c\
 		  src/framework/drawing/drawing.c\
 		  src/framework/drawing/drawing_utils.c\
 		  src/framework/math/cub_math.c

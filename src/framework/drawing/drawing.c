@@ -24,16 +24,16 @@ void	pixel_to_fbuff(t_img *fbuff, t_vec2 pos, t_color col)
 	}
 }
 
-void	square_to_fbuff(t_img *fbuff, t_vec2 pos, t_vec2 size, t_color col)
+void	square_to_fbuff(t_img *fbuff, t_rec rec, t_color col)
 {
 	t_vec2	pos_buff;
 
-	pos_buff = (t_vec2){pos.x - 1, pos.y - 1};
-	while (++pos.y < (pos_buff.y + size.y))
+	pos_buff = (t_vec2){rec.x - 1, rec.y - 1};
+	while (++pos_buff.y < (rec.y + rec.height))
 	{
-		while (++pos.x < (pos_buff.x + size.x))
-			pixel_to_fbuff(fbuff, pos, col);
-		pos.x = pos_buff.x;
+		while (++pos_buff.x < (rec.x + rec.width))
+			pixel_to_fbuff(fbuff, pos_buff, col);
+		pos_buff.x = rec.x;
 	}
 }
 
