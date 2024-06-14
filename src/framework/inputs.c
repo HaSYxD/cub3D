@@ -4,7 +4,7 @@ int	mouse_press(int mouse_code, int x, int y, t_data *data)
 {
 	(void)x;
 	(void)y;
-	if (mouse_code == 1)
+	if (mouse_code >= 1)
 		data->mouse_state = mouse_code;
 	return (0);
 }

@@ -28,7 +28,9 @@ void	update_button(t_button *button, int new_state, t_data *data)
 	{
 		if (button->state == 0)
 			button->state = -1;
-		if (data->mouse_state == 1)
+		if (data->mouse_state == 3 && button->type == TOGGLE)
+			button->state = 0;
+		else if (data->mouse_state == 1)
 			button->state = new_state;
 		else if (button->state > 0 && button->type == PUSH)
 			button->state = 0;
@@ -44,7 +46,7 @@ void	draw_button(t_button button, t_data *data)
 	if (button.state == 1)
 		square_to_fbuff(&data->frame_buffer, button.body, MLX_WHITE);
 	else if (button.state == 2)
-		square_to_fbuff(&data->frame_buffer, button.body, MLX_RED);
+		square_to_fbuff(&data->frame_buffer, button.body, MLX_LGRAY);
 	else if (button.state == -1)
 		square_to_fbuff(&data->frame_buffer, button.body, MLX_LGRAY);
 	else

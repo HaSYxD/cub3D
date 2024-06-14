@@ -20,9 +20,23 @@ t_txtbox	txt4 = {0};
 t_txtbox	txt5 = {0};
 t_txtbox	txt6 = {0};
 int	grid_size;
+int	grid_len;
 
 t_button	test;
 
+static void	fill_grid(int i)
+{
+	grid[i].state = 2;
+	if (i > 0 && grid[i - 1].state == 0)
+		return (fill_grid(i - 1));
+	if (i < grid_size && grid[i + 1].state == 0)
+		return (fill_grid(i + 1));
+	if (i > grid_len && grid[i - grid_len].state == 0)
+		return (fill_grid(i - grid_len));
+	if (i < (grid_size - grid_len) && grid[i + grid_len].state == 0)
+		return (fill_grid(i + grid_len));
+}
+int	gridmod = 1;
 static int	render(t_data *data)
 {
 	int	mx, my = 0;
@@ -30,7 +44,9 @@ static int	render(t_data *data)
 	mlx_mouse_get_pos(data->mlx, data->win, &mx, &my);
 	data->mouse_position = (t_vec2){mx, my};
 	for (int i = 0; i < grid_size; i++) {
-		update_button(&grid[i], 1, data);
+		update_button(&grid[i], gridmod, data);
+		if (grid[i].state == 2 && data->mouse_state == 1)
+			fill_grid(i);
 	}
 	update_txtbox(&txt, data);
 	update_txtbox(&txt2, data);
@@ -39,6 +55,8 @@ static int	render(t_data *data)
 	update_txtbox(&txt5, data);
 	update_txtbox(&txt6, data);
 	update_button(&test, 2, data);
+	if (test.state == 2)
+		gridmod = 2;
 	for (int i = 0; i < grid_size; i++) {
 		draw_button(grid[i], data);
 	}
@@ -61,7 +79,8 @@ void	editor_loop(t_data *data, char *argv[])
 	int	xoffset;
 
 	c = (t_count){-1, ft_atoi(argv[2]), 0};
-	if (c.j < 5 || c.j > 30)
+	grid_len = c.j;
+	if (c.j < 5 || c.j > 40)
 	{
 		printf("Map size must be between 5 and 30 square wide\n");
 		return ;
