@@ -6,7 +6,7 @@
 /*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 11:43:44 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/13 11:43:45 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/16 22:38:51 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	update_button(t_button *button, int new_state, t_mlxctx *mlx)
 	else
 		if (button->state == -1)
 			button->state = 0;
-
 }
 
 void	draw_button(t_button button, t_mlxctx *mlx)
@@ -52,5 +51,7 @@ void	draw_button(t_button button, t_mlxctx *mlx)
 	else
 		square_to_fbuff(mlx, button.body, MLX_DGRAY);
 	if (button.title[0])
-		mlx_string_put(mlx->mlx, mlx->win, button.body.x, button.body.y + button.body.height, color_to_int(MLX_RED), button.title);
+		mlx_string_put(mlx->mlx, mlx->win, button.body.x,
+			button.body.y + button.body.height,
+			color_to_int(MLX_RED), button.title);
 }

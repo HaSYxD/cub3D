@@ -1,5 +1,17 @@
-#ifndef CUB3D_INT_H
-# define CUB3D_INT_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub_framework.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/16 22:40:21 by aliaudet          #+#    #+#             */
+/*   Updated: 2024/06/16 22:42:16 by aliaudet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef CUB_FRAMEWORK_H
+# define CUB_FRAMEWORK_H
 
 //DEPENDENCIES------------//
 # include <X11/keysym.h>
@@ -49,8 +61,8 @@ typedef struct s_rec
 {
 	float	x;
 	float	y;
-	int	width;
-	int	height;
+	int		width;
+	int		height;
 }	t_rec;
 //to use for representing any rectangle in memory
 
@@ -84,9 +96,9 @@ typedef struct s_txtbox
 typedef struct s_button
 {
 	t_rec	body;
-	int	state;
 	char	*title;
-	int	type;
+	int		state;
+	int		type;
 }	t_button;
 //interactive rectangle
 
@@ -96,10 +108,10 @@ typedef struct s_mlxctx
 	t_img	frame_buffer;
 	void	*mlx;
 	void	*win;
-	int	win_w;
-	int	win_h;
-	int	mouse_state;
-	int	key_state[2];
+	int		win_w;
+	int		win_h;
+	int		mouse_state;
+	int		key_state[2];
 }	t_mlxctx;
 //------------------------//
 
@@ -120,25 +132,25 @@ void	image_to_fbuff(t_mlxctx *mlx, t_img *img, t_vec2 size, t_vec2 pos);
 void	print_fps_to_consol(void);
 //monitoring functions
 
-int	check_collision_point_rec(t_rec rec, t_vec2 point);
-//collision functions
-
 t_button	get_button(t_rec body, char *title, int type);
-void			update_button(t_button *button, int new_state, t_mlxctx *mlx);
-void			draw_button(t_button button, t_mlxctx *mlx);
+void	update_button(t_button *button, int new_state, t_mlxctx *mlx);
+void	draw_button(t_button button, t_mlxctx *mlx);
 t_txtbox	get_txtbox(t_rec body, char *title);
-void			update_txtbox(t_txtbox *txtbox, t_mlxctx *mlx);
-void			draw_txtbox(t_txtbox txtbox, t_mlxctx *mlx);
+void	update_txtbox(t_txtbox *txtbox, t_mlxctx *mlx);
+void	draw_txtbox(t_txtbox txtbox, t_mlxctx *mlx);
 //ui functions
 
-int	mouse_press(int mouse_code, int x, int y, t_mlxctx *mlx);
-int	mouse_release(int mouse_code, int x, int y, t_mlxctx *mlx);
-int	key_press(int key_code, t_mlxctx *mlx);
-int	key_release(int key_code, t_mlxctx *mlx);
+int		check_collision_point_rec(t_rec rec, t_vec2 point);
+//collision functions
+
+int		mouse_press(int mouse_code, int x, int y, t_mlxctx *mlx);
+int		mouse_release(int mouse_code, int x, int y, t_mlxctx *mlx);
+int		key_press(int key_code, t_mlxctx *mlx);
+int		key_release(int key_code, t_mlxctx *mlx);
 //input	handling functions
 
-int	init_mlxctx(t_mlxctx *mlx, int w, int h, char *name);
-int	destroy_mlxctx(t_mlxctx *mlx);
+int		init_mlxctx(t_mlxctx *mlx, int w, int h, char *name);
+int		destroy_mlxctx(t_mlxctx *mlx);
 //mlx context handling
 //------------------------//
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub_editor.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/16 22:39:46 by aliaudet          #+#    #+#             */
+/*   Updated: 2024/06/16 22:40:11 by aliaudet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB_EDITOR_H
 # define CUB_EDITOR_H
 
@@ -22,10 +34,10 @@ typedef struct s_data_ed
 {
 	t_garb		gc;
 	t_mlxctx	*mlx;
-	t_txtbox	ui_usrin[6];
+	t_txtbox	txt[6];
 	t_button	*grid;
-	int		grid_size;
-	int		grid_len;
+	int			grid_size;
+	int			grid_len;
 }	t_data_ed;
 //general cub3D datas
 //------------------------//

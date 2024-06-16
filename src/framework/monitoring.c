@@ -6,7 +6,7 @@
 /*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 11:44:09 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/13 11:44:11 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/16 22:35:39 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	print_fps_to_consol(void)
 {
 	static double	start_time = 0;
-	static int	frames = 1;
+	static int		frames = 1;
 	double			sec;
 
 	if (!start_time)
