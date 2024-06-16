@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cub3d.h>
+#include <cub_framework.h>
 
 void	print_fps_to_consol(void)
 {

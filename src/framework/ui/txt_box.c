@@ -1,4 +1,4 @@
-#include <cub3d.h>
+#include <cub_framework.h>
 
 t_txtbox	get_txtbox(t_rec body, char *title)
 {
@@ -9,30 +9,30 @@ t_txtbox	get_txtbox(t_rec body, char *title)
 	});
 }
 
-void	update_txtbox(t_txtbox *txtbox, t_data *data)
+void	update_txtbox(t_txtbox *txtbox, t_mlxctx *mlx)
 {
 	int	i;
 
 	i = 0;
-	if (check_collision_point_rec(txtbox->body, data->mouse_position))
+	if (check_collision_point_rec(txtbox->body, mlx->mouse_position))
 	{
 		while (i < MAX_TXTBOX_LEN && txtbox->txt[i])
 			i++;
-		if (data->key_state[1] == 65288 && i > 0)
+		if (mlx->key_state[1] == 65288 && i > 0)
 			txtbox->txt[--i] = 0;
-		else if (data->key_state[1] != 65288)
-			txtbox->txt[i] = data->key_state[1];
-		data->key_state[1] = 0;
+		else if (mlx->key_state[1] != 65288)
+			txtbox->txt[i] = mlx->key_state[1];
+		mlx->key_state[1] = 0;
 	}
 }
 
-void	draw_txtbox(t_txtbox txtbox, t_data *data)
+void	draw_txtbox(t_txtbox txtbox, t_mlxctx *mlx)
 {
 	t_rec	border;
 
 	border = (t_rec){txtbox.body.x-5, txtbox.body.y-5, txtbox.body.width+10, txtbox.body.height+10};
-	square_to_fbuff(&data->frame_buffer, border, MLX_LGRAY);
-	square_to_fbuff(&data->frame_buffer, txtbox.body, MLX_WHITE);
-	mlx_string_put(data->mlx, data->win, txtbox.body.x, txtbox.body.y - 5, color_to_int(MLX_WHITE), txtbox.title);
-	mlx_string_put(data->mlx, data->win, txtbox.body.x, txtbox.body.y + txtbox.body.height, color_to_int(MLX_BLACK), txtbox.txt);
+	square_to_fbuff(mlx, border, MLX_LGRAY);
+	square_to_fbuff(mlx, txtbox.body, MLX_WHITE);
+	mlx_string_put(mlx->mlx, mlx->win, txtbox.body.x, txtbox.body.y - 5, color_to_int(MLX_WHITE), txtbox.title);
+	mlx_string_put(mlx->mlx, mlx->win, txtbox.body.x, txtbox.body.y + txtbox.body.height, color_to_int(MLX_BLACK), txtbox.txt);
 }

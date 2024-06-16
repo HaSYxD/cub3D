@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cub3d.h>
+#include <cub_framework.h>
 
 int	check_collision_point_rec(t_rec rec, t_vec2 point)
 {

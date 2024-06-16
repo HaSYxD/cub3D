@@ -10,99 +10,100 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cub3d.h>
-
-t_button	*grid = NULL;
-t_txtbox	txt = {0};
-t_txtbox	txt2 = {0};
-t_txtbox	txt3 = {0};
-t_txtbox	txt4 = {0};
-t_txtbox	txt5 = {0};
-t_txtbox	txt6 = {0};
-int	grid_size;
-int	grid_len;
+#include <cub_editor.h>
 
 t_button	test;
 
-static void	fill_grid(int i)
+static void	fill_grid(int i, t_data_ed *data)
 {
-	grid[i].state = 2;
-	if (i > 0 && grid[i - 1].state == 0)
-		return (fill_grid(i - 1));
-	if (i < grid_size && grid[i + 1].state == 0)
-		return (fill_grid(i + 1));
-	if (i > grid_len && grid[i - grid_len].state == 0)
-		return (fill_grid(i - grid_len));
-	if (i < (grid_size - grid_len) && grid[i + grid_len].state == 0)
-		return (fill_grid(i + grid_len));
+	int	grid_size;
+	int	grid_len;
+
+	grid_size = data->grid_size;
+	grid_len = data->grid_len;
+	data->grid[i].state = 2;
+	if (i > 0 && data->grid[i - 1].state == 0)
+		return (fill_grid(i - 1, data));
+	if (i < grid_size && data->grid[i + 1].state == 0)
+		return (fill_grid(i + 1, data));
+	if (i > grid_len && data->grid[i - grid_len].state == 0)
+		return (fill_grid(i - grid_len, data));
+	if (i < (grid_size - grid_len) && data->grid[i + grid_len].state == 0)
+		return (fill_grid(i + grid_len, data));
 }
 int	gridmod = 1;
-static int	render(t_data *data)
+static int	render(t_data_ed *data)
 {
 	int	mx, my = 0;
 
-	mlx_mouse_get_pos(data->mlx, data->win, &mx, &my);
-	data->mouse_position = (t_vec2){mx, my};
-	for (int i = 0; i < grid_size; i++) {
-		update_button(&grid[i], gridmod, data);
-		if (grid[i].state == 2 && data->mouse_state == 1)
-			fill_grid(i);
+	mlx_mouse_get_pos(data->mlx->mlx, data->mlx->win, &mx, &my);
+	data->mlx->mouse_position = (t_vec2){mx, my};
+	for (int i = 0; i < data->grid_size; i++) {
+		update_button(&data->grid[i], gridmod, data->mlx);
+		if (data->grid[i].state == 2 && data->mlx->mouse_state == 1)
+			fill_grid(i, data);
 	}
-	update_txtbox(&txt, data);
-	update_txtbox(&txt2, data);
-	update_txtbox(&txt3, data);
-	update_txtbox(&txt4, data);
-	update_txtbox(&txt5, data);
-	update_txtbox(&txt6, data);
-	update_button(&test, 2, data);
+	for (int i = 0; i < 6; i++)
+		update_txtbox(&data->ui_usrin[i], data->mlx);
+	update_button(&test, 2, data->mlx);
 	if (test.state == 2)
 		gridmod = 2;
-	for (int i = 0; i < grid_size; i++) {
-		draw_button(grid[i], data);
+	for (int i = 0; i < data->grid_size; i++) {
+		draw_button(data->grid[i], data->mlx);
 	}
-	mlx_put_image_to_window(data->mlx, data->win, data->frame_buffer.img, 0, 0);
-	draw_txtbox(txt, data);
-	draw_txtbox(txt2, data);
-	draw_txtbox(txt3, data);
-	draw_txtbox(txt4, data);
-	draw_txtbox(txt5, data);
-	draw_txtbox(txt6, data);
-	draw_button(test, data);
+	mlx_put_image_to_window(data->mlx->mlx, data->mlx->win, data->mlx->frame_buffer.img, 0, 0);
+	for (int i = 0; i < 6; i++)
+		draw_txtbox(data->ui_usrin[i], data->mlx);
+	draw_button(test, data->mlx);
 	print_fps_to_consol();
 	return (0);
 }
 
-void	editor_loop(t_data *data, char *argv[])
+int	exit_cub_editor(t_data_ed *data)
+{
+	destroy_mlxctx(data->mlx);
+	clean_garbage(&data->gc);
+	exit(0);
+}
+
+int	init_cub_editor(t_data_ed *data, char *argv[])
 {
 	t_count	c;
-	int	scale;
-	int	xoffset;
 
-	c = (t_count){-1, ft_atoi(argv[2]), 0};
-	grid_len = c.j;
-	if (c.j < 5 || c.j > 40)
+	data->gc = (t_garb){NULL, 0};
+	data->grid_len = ft_atoi(argv[2]);
+	data->grid_size = (int)pow(data->grid_len, 2);
+	c = (t_count){-1, WIN_H / (data->grid_len * (WIN_H / 451)), (WIN_W - WIN_H) / 2};
+	if (data->grid_len < 5 || data->grid_len > 40)
+		return (printf("Map size must be between 5 and 40 square wide\n"), -1);
+	data->grid = allocate(sizeof(t_button) * data->grid_size, &data->gc);
+	while (++c.i < data->grid_size)
+		data->grid[c.i] = get_button((t_rec){(c.i%data->grid_len*c.j) + c.k, (c.i/data->grid_len*c.j), c.j-1, c.j-1}, "", TOGGLE);
+	data->ui_usrin[0] = get_txtbox((t_rec){20, 50, 300, 25}, "North Texture Path");
+	data->ui_usrin[1] = get_txtbox((t_rec){20, 125, 300, 25}, "South Texture Path");
+	data->ui_usrin[2] = get_txtbox((t_rec){20, 200, 300, 25}, "West Texture Path");
+	data->ui_usrin[3] = get_txtbox((t_rec){20, 275, 300, 25}, "East Texture Path");
+	data->ui_usrin[4] = get_txtbox((t_rec){20, 400, 300, 25}, "Floor RGB color");
+	data->ui_usrin[5] = get_txtbox((t_rec){20, 475, 300, 25}, "Ceilling RGB color");
+	return (0);
+}
+
+void	run_editor(t_mlxctx *mlx, char *argv[])
+{
+	t_data_ed	data;
+
+	if (init_cub_editor(&data, argv) != 0)
 	{
-		printf("Map size must be between 5 and 30 square wide\n");
+		destroy_mlxctx(mlx);
 		return ;
 	}
-	grid_size = c.j * c.j;
-	grid = malloc(sizeof(*grid) * grid_size);
-	scale = WIN_H / (c.j * (WIN_H / 451));
-	xoffset = (WIN_W - WIN_H) / 2;
-	mlx_set_font(data->mlx, data->win, FONT);
-	while (++c.i < grid_size)
-		grid[c.i] = get_button((t_rec){(c.i%c.j*scale) + xoffset, (c.i/c.j*scale), scale-1, scale-1}, "", TOGGLE);
+	data.mlx = mlx;
 	test = get_button((t_rec){20, 600, 300, 50}, "ceci est un test", PUSH);
-	txt = get_txtbox((t_rec){20, 50, 300, 25}, "North Texture Path");
-	txt2 = get_txtbox((t_rec){20, 125, 300, 25}, "South Texture Path");
-	txt3 = get_txtbox((t_rec){20, 200, 300, 25}, "West Texture Path");
-	txt4 = get_txtbox((t_rec){20, 275, 300, 25}, "East Texture Path");
-	txt5 = get_txtbox((t_rec){20, 400, 300, 25}, "Floor RGB color");
-	txt6 = get_txtbox((t_rec){20, 475, 300, 25}, "Ceilling RGB color");
-	mlx_loop_hook(data->mlx, &render, data);
-	mlx_hook(data->win, KeyPress, KeyPressMask, key_press, data);
-	mlx_hook(data->win, KeyRelease, KeyReleaseMask, key_release, data);
-	mlx_hook(data->win, ButtonPress, ButtonPressMask, mouse_press, data);
-	mlx_hook(data->win, ButtonRelease, ButtonReleaseMask, mouse_release, data);
-	mlx_loop(data->mlx);
+	mlx_hook(mlx->win, KeyPress, KeyPressMask, key_press, mlx);
+	mlx_hook(mlx->win, KeyRelease, KeyReleaseMask, key_release, mlx);
+	mlx_hook(mlx->win, ButtonPress, ButtonPressMask, mouse_press, mlx);
+	mlx_hook(mlx->win, ButtonRelease, ButtonReleaseMask, mouse_release, mlx);
+	mlx_loop_hook(mlx->mlx, &render, &data);
+	mlx_hook(mlx->win, DestroyNotify, StructureNotifyMask, exit_cub_editor, &data);
+	mlx_loop(mlx->mlx);
 }

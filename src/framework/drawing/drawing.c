@@ -10,13 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cub3d.h>
+#include <cub_framework.h>
 
-void	pixel_to_fbuff(t_img *fbuff, t_vec2 pos, t_color col)
+void	pixel_to_fbuff(t_mlxctx *mlx, t_vec2 pos, t_color col)
 {
+	t_img	*fbuff;
 	char	*pixel;
 
-	if (pos.x >= 0 && pos.y >= 0 && pos.x <= WIN_W && pos.y <= WIN_H)
+	fbuff = &mlx->frame_buffer;
+	if (pos.x >= 0 && pos.y >= 0 && pos.x <= mlx->win_w && pos.y <= mlx->win_h)
 	{
 		pixel = fbuff->addr + (int)(pos.y * fbuff->line_length + pos.x
 				* (fbuff->bpp / 8));
@@ -24,7 +26,7 @@ void	pixel_to_fbuff(t_img *fbuff, t_vec2 pos, t_color col)
 	}
 }
 
-void	square_to_fbuff(t_img *fbuff, t_rec rec, t_color col)
+void	square_to_fbuff(t_mlxctx *mlx, t_rec rec, t_color col)
 {
 	t_vec2	pos_buff;
 
@@ -32,12 +34,12 @@ void	square_to_fbuff(t_img *fbuff, t_rec rec, t_color col)
 	while (++pos_buff.y < (rec.y + rec.height))
 	{
 		while (++pos_buff.x < (rec.x + rec.width))
-			pixel_to_fbuff(fbuff, pos_buff, col);
+			pixel_to_fbuff(mlx, pos_buff, col);
 		pos_buff.x = rec.x;
 	}
 }
 
-void	circle_to_fbuff(t_img *fbuff, t_vec2 pos, float radius, t_color col)
+void	circle_to_fbuff(t_mlxctx *mlx, t_vec2 pos, float radius, t_color col)
 {
 	t_count	c;
 	t_vec2	pos_buff;
@@ -48,18 +50,20 @@ void	circle_to_fbuff(t_img *fbuff, t_vec2 pos, float radius, t_color col)
 	{
 		while (++c.j < (pos_buff.y + (radius * 2)))
 			if (vec2_dst((t_vec2){c.j, c.i}, pos) <= radius)
-				pixel_to_fbuff(fbuff, (t_vec2){c.j, c.i}, col);
+				pixel_to_fbuff(mlx, (t_vec2){c.j, c.i}, col);
 		c.j = pos_buff.y;
 	}
 }
 
-void	image_to_fbuff(t_img *fbuff, t_img *img, t_vec2 size, t_vec2 pos)
+void	image_to_fbuff(t_mlxctx *mlx, t_img *img, t_vec2 size, t_vec2 pos)
 {
+	t_img	*fbuff;
 	char	*pixel;
 	int		i;
 	int		limit;
 
 	i = -1;
+	fbuff = &mlx->frame_buffer;
 	limit = (size.x * size.y) * (img->bpp / 8);
 	while (++i < limit)
 	{

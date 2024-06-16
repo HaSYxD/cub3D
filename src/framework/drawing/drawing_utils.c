@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cub3d.h>
+#include <cub_framework.h>
 
 int	color_to_int(t_color col)
 {

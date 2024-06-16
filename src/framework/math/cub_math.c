@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cub3d.h>
+#include <cub_framework.h>
 
 float	vec2_dst(t_vec2 point, t_vec2 c_pos)
 {

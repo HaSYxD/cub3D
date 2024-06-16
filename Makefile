@@ -11,8 +11,10 @@
 # **************************************************************************** #
 
 NAME	= cub3D
-SRC		= src/cub3D/cub3d.c\
+SRC		= src/main.c\
+		  src/cub3D/cub3d.c\
 		  src/editor/editor.c\
+		  src/framework/mlx_context.c\
 		  src/framework/inputs.c\
 		  src/framework/collision.c\
 		  src/framework/monitoring.c\
@@ -37,7 +39,7 @@ $(NAME): ${OBJS}
 	@cd libs/minilibx-linux;make
 	${CC} ${OBJS} -o ${NAME} ${CFLAGS} ${INCLUDES} ${LIBS}
 %.o: %.c
-	${CC} ${CFLAGS} ${INCLUDES} ${LIBS} -c $< -o $@
+	${CC} ${CFLAGS} ${INCLUDES} -c $< -o $@
 clean:
 	@cd libs/libft;make clean
 	@if test -d ./libs/minilibx-linux; then\
