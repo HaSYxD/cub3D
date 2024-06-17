@@ -35,23 +35,23 @@ void	square_to_fbuff(t_mlxctx *mlx, t_rec rec, t_color col)
 	{
 		while (++pos_buff.x < (rec.x + rec.width))
 			pixel_to_fbuff(mlx, pos_buff, col);
-		pos_buff.x = rec.x;
+		pos_buff.x = rec.x - 1;
 	}
 }
 
 void	circle_to_fbuff(t_mlxctx *mlx, t_vec2 pos, float radius, t_color col)
 {
-	t_count	c;
+	// t_count	c;
 	t_vec2	pos_buff;
 
-	c = (t_count){pos.x - radius - 1, pos.y - radius - 1, 0};
-	pos_buff = (t_vec2){pos.x - radius, pos.y - radius};
-	while (++c.i < (pos_buff.x + (radius * 2)))
+	// c = (t_count){pos.x - radius - 1, pos.y - radius - 1, 0};
+	pos_buff = (t_vec2){pos.x - radius - 1, pos.y - radius - 1};
+	while (++pos_buff.y < (pos.y + (radius * 2)))
 	{
-		while (++c.j < (pos_buff.y + (radius * 2)))
-			if (vec2_dst((t_vec2){c.j, c.i}, pos) <= radius)
-				pixel_to_fbuff(mlx, (t_vec2){c.j, c.i}, col);
-		c.j = pos_buff.y;
+		while (++pos_buff.x < (pos.x + (radius * 2)))
+			if (vec2_dst((t_vec2){pos_buff.x, pos_buff.y}, pos) <= radius)
+				pixel_to_fbuff(mlx, (t_vec2){(int)pos_buff.x, (int)pos_buff.y}, col);
+		pos_buff.x = pos.x - radius - 1;
 	}
 }
 

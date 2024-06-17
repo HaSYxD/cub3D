@@ -18,8 +18,7 @@ int	main(int argc, char *argv[])
 	t_mlxctx	mlx;
 	t_cdata		cdata;
 	//t_edata		edata;
-
-
+	
 	cdata.gc = (t_garb){NULL, 0};
 	if (argc >= 2)
 	{
