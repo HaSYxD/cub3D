@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 09:38:00 by aliaudet          #+#    #+#             */
-/*   Updated: 2023/11/20 16:04:17 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:18:05 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*extract_line(char *stash, t_garb *gc)
 	}
 	if (stash[i] == '\n')
 	{
-		dst[i] = '\0';
+		dst[i] = stash[i];
 		i++;
 	}
 	dst[i] = '\0';
@@ -82,17 +82,16 @@ char	*read_to_stash(int fd, char *stash, t_garb *gc)
 	return (stash);
 }
 
-char	*gnl(int fd, t_garb *gc)
+int	gnl(int fd, char **line, t_garb *gc)
 {
 	static char	*stash;
-	char		*line;
 
 	if (fd < 0 || GNL_BUFFER_SIZE <= 0)
-		return (0);
+		return (-1);
 	stash = read_to_stash(fd, stash, gc);
 	if (!stash)
-		return (NULL);
-	line = extract_line(stash, gc);
+		return (0);
+	*line = extract_line(stash, gc);
 	stash = clean_stash(stash, gc);
-	return (line);
+	return (ft_strlen(*line));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 22:39:17 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/16 22:39:19 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:01:21 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,19 @@
 int	main(int argc, char *argv[])
 {
 	t_mlxctx	mlx;
+	t_cdata		cdata;
+	//t_edata		edata;
 
+
+	cdata.gc = (t_garb){NULL, 0};
 	if (argc >= 2)
 	{
+		if (ft_errorarg(argv, argc) != 0)
+			return (1);
+		if (argc == 2 && ft_cparsing(argv, &cdata.gc, &cdata) != 0)
+			return (1);
+		//else if (argc == 3)
+		//ft_eparsing(argv, &parsgc, &edata);
 		if (init_mlxctx(&mlx, WIN_W, WIN_H, WIN_N) != 0)
 			destroy_mlxctx(&mlx);
 		if ((ft_strncmp(argv[1], "EDITOR", 6) == 0) && argc == 3)

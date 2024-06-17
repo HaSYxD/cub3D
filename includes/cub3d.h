@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 01:03:36 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/07 01:03:42 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/17 16:35:41 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@
 typedef struct s_cdata
 {
 	t_mlxctx	*mlx;
+	t_garb	gc;
 	t_vec2	p_pos;
 	double	p_angle;
 	t_color	map_col[2];
-	t_img	wall_tex[4];
+	char	(*wall_tex[4]);
 	t_vec2	map_size;
 	char	**map;
 }	t_cdata;
@@ -38,5 +39,11 @@ typedef struct s_cdata
 //------------------------//
 
 void	run_cub3d(t_mlxctx *mlx);
+
+int ft_errorarg(char **agv, int argc);
+
+int	ft_cparsing(char **agv, t_garb *gc, t_cdata *cdata);
+
+//int	ft_eparsing(char **agv, t_garb *gc, t_edata *edata);
 
 #endif

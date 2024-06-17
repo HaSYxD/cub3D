@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 16:15:24 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/05/14 16:40:29 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:02:38 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ double	ft_gettime(void);
 size_t	ft_gnlstrlen(const char *str);
 char	*ft_gnlstrjoin(char *s1, char *s2, t_garb *gc);
 char	*ft_gnlstrchr(char *str, int c);
-char	*gnl(int fd, t_garb *gc);
+int		gnl(int fd, char **line, t_garb *gc);
 
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstlast(t_list *lst);
