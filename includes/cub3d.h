@@ -24,12 +24,19 @@
 //------------------------//
 
 //GENERAL DATAS-----------//
-typedef struct s_data_cub
+typedef struct s_cdata
 {
-	t_img	creeper;
-}	t_data_cub;
+	t_mlxctx	*mlx;
+	t_vec2	p_pos;
+	double	p_angle;
+	t_color	map_col[2];
+	t_img	wall_tex[4];
+	t_vec2	map_size;
+	char	**map;
+}	t_cdata;
 //general cub3D datas
 //------------------------//
+
 void	run_cub3d(t_mlxctx *mlx);
 
 #endif

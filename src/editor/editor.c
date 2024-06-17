@@ -14,7 +14,7 @@
 
 t_button	test;
 
-static void	fill_grid(int i, t_data_ed *data)
+static void	fill_grid(int i, t_edata *data)
 {
 	int	grid_size;
 	int	grid_len;
@@ -34,7 +34,7 @@ static void	fill_grid(int i, t_data_ed *data)
 
 int	gridmod = 1;
 
-static int	render(t_data_ed *data)
+static int	render(t_edata *data)
 {
 	t_count	c;
 
@@ -64,14 +64,14 @@ static int	render(t_data_ed *data)
 	return (0);
 }
 
-int	exit_cub_editor(t_data_ed *data)
+int	exit_cub_editor(t_edata *data)
 {
 	destroy_mlxctx(data->mlx);
 	clean_garbage(&data->gc);
 	exit(0);
 }
 
-int	init_cub_editor(t_data_ed *data, char *argv[])
+int	init_cub_editor(t_edata *data, char *argv[])
 {
 	t_count	c;
 
@@ -97,7 +97,7 @@ int	init_cub_editor(t_data_ed *data, char *argv[])
 
 void	run_editor(t_mlxctx *mlx, char *argv[])
 {
-	t_data_ed	data;
+	t_edata	data;
 
 	if (init_cub_editor(&data, argv) != 0)
 	{

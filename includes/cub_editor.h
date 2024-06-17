@@ -20,17 +20,11 @@
 //------------------------//
 
 //DEPENDENCIES------------//
-# include <X11/keysym.h>
-# include <X11/X.h>
-# include <libft.h>
-# include <math.h>
-# include <mlx.h>
-
 # include <cub_framework.h>
 //------------------------//
 
 //GENERAL DATAS-----------//
-typedef struct s_data_ed
+typedef struct s_edata
 {
 	t_garb		gc;
 	t_mlxctx	*mlx;
@@ -38,7 +32,7 @@ typedef struct s_data_ed
 	t_button	*grid;
 	int			grid_size;
 	int			grid_len;
-}	t_data_ed;
+}	t_edata;
 //general cub3D datas
 //------------------------//
 
