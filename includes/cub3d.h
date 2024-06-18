@@ -30,6 +30,7 @@ typedef struct s_cdata
 	t_garb	gc;
 	t_vec2	p_pos;
 	double	p_angle;
+	char	**texture;
 	t_color	map_col[2];
 	char	(*wall_tex[4]);
 	t_vec2	map_size;
@@ -38,7 +39,11 @@ typedef struct s_cdata
 //general cub3D datas
 //------------------------//
 
-void	run_cub3d(t_mlxctx *mlx);
+void	run_cub3d(t_cdata *data);
+
+int	check_player_to_map_collision(char **map, t_vec2 msize, t_vec2 dpos);
+
+void	player_move(t_cdata *data);
 
 int ft_errorarg(char **agv, int argc);
 

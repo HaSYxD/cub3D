@@ -104,6 +104,7 @@ typedef struct s_button
 
 typedef struct s_mlxctx
 {
+	double	frame_time;
 	t_vec2	mouse_position;
 	t_img	frame_buffer;
 	void	*mlx;
@@ -111,7 +112,7 @@ typedef struct s_mlxctx
 	int		win_w;
 	int		win_h;
 	int		mouse_state;
-	int		key_state[2];
+	int		key_state[3];
 }	t_mlxctx;
 //------------------------//
 
@@ -123,13 +124,14 @@ int		color_to_int(t_color col);
 float	vec2_dst(t_vec2 point, t_vec2 c_pos);
 //math functions
 
+void	line_to_fbuff(t_mlxctx *mlx, t_vec2 p1, t_vec2 p2, t_color color);
 void	circle_to_fbuff(t_mlxctx *mlx, t_vec2 pos, float radius, t_color col);
 void	square_to_fbuff(t_mlxctx *mlx, t_rec rec, t_color col);
 void	pixel_to_fbuff(t_mlxctx *mlx, t_vec2 pos, t_color col);
 void	image_to_fbuff(t_mlxctx *mlx, t_img *img, t_vec2 size, t_vec2 pos);
 //drawing functions
 
-void	print_fps_to_consol(void);
+void	print_fps_to_consol(t_mlxctx *mlx);
 //monitoring functions
 
 t_button	get_button(t_rec body, char *title, int type);
@@ -147,6 +149,7 @@ int		mouse_press(int mouse_code, int x, int y, t_mlxctx *mlx);
 int		mouse_release(int mouse_code, int x, int y, t_mlxctx *mlx);
 int		key_press(int key_code, t_mlxctx *mlx);
 int		key_release(int key_code, t_mlxctx *mlx);
+int		is_key_down(t_mlxctx *mlx, int key);
 //input	handling functions
 
 int		init_mlxctx(t_mlxctx *mlx, int w, int h, char *name);

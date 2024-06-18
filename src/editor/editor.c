@@ -60,7 +60,7 @@ static int	render(t_edata *data)
 	c.i = -1;
 	while (++c.i < 6)
 		draw_txtbox(data->txt[c.i], data->mlx);
-	print_fps_to_consol();
+	print_fps_to_consol(data->mlx);
 	return (0);
 }
 

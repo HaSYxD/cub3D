@@ -18,7 +18,7 @@ int	main(int argc, char *argv[])
 	t_mlxctx	mlx;
 	t_cdata		cdata;
 	//t_edata		edata;
-	
+
 	cdata.gc = (t_garb){NULL, 0};
 	if (argc >= 2)
 	{
@@ -30,10 +30,11 @@ int	main(int argc, char *argv[])
 		//ft_eparsing(argv, &parsgc, &edata);
 		if (init_mlxctx(&mlx, WIN_W, WIN_H, WIN_N) != 0)
 			destroy_mlxctx(&mlx);
+		cdata.mlx = &mlx;
 		if ((ft_strncmp(argv[1], "EDITOR", 6) == 0) && argc == 3)
 			run_editor(&mlx, argv);
 		else if ((ft_strncmp(argv[1], "EDITOR", 6) != 0) && argc == 2)
-			run_cub3d(&mlx);
+			run_cub3d(&cdata);
 	}
 	return (0);
 }

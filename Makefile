@@ -13,7 +13,9 @@
 NAME	= cub3D
 SRC		= src/main.c\
 		  src/parsing.c\
+		  src/cub3D/map.c\
 		  src/cub3D/cub3d.c\
+		  src/cub3D/player.c\
 		  src/editor/editor.c\
 		  src/framework/mlx_context.c\
 		  src/framework/inputs.c\
@@ -22,6 +24,7 @@ SRC		= src/main.c\
 		  src/framework/ui/button.c\
 		  src/framework/ui/txt_box.c\
 		  src/framework/drawing/drawing.c\
+		  src/framework/drawing/draw_line.c\
 		  src/framework/drawing/drawing_utils.c\
 		  src/framework/math/cub_math.c
 OBJS	= $(SRC:.c=.o)

@@ -61,7 +61,7 @@ int ft_texturevalide(char *file)
 			return (5);
 		else if ((i == 0 && file[i] == 'C' && file[i + 1] == ' ') || (file[i] == 'C' && file[i + 1] == ' ' && file[i - 1] == ' '))
 			return (6);
-		
+
 	}
 	return (0);
 }
@@ -120,7 +120,7 @@ void ft_splitfile(char **file, t_garb *gc, t_cdata *cdata)
 	size_t i;
 	size_t j;
 	int k;
-	
+
 	i = -1;
 	j = 0;
 	k = 0;
@@ -140,7 +140,7 @@ void ft_splitfile(char **file, t_garb *gc, t_cdata *cdata)
 	{
 		if (ft_countw(file[j], ' ') != 0)
 			cdata->texture[j + k] = ft_strdup(file[j], gc);
-		else 
+		else
 			k--;
 	}
 	cdata->texture[j + k] = NULL;
@@ -179,8 +179,8 @@ void ft_initextures(t_cdata *cdata)
 	i = -1;
 	while (++i < 4)
 		cdata->wall_tex[i] = NULL;
-	cdata->map_col[0] = NULL;
-	cdata->map_col[1] = NULL;
+	cdata->map_col[0] = (t_color){0};
+	cdata->map_col[1] = (t_color){0};
 }
 
 void ft_map(t_garb *gc, t_cdata *cdata)

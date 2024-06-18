@@ -34,6 +34,9 @@ int	init_mlxctx(t_mlxctx *mlx, int w, int h, char *name)
 	mlx->win_w = w;
 	mlx->win_h = h;
 	mlx->mouse_state = 0;
+	mlx->key_state[0] = 0;
+	mlx->key_state[1] = 0;
+	mlx->key_state[2] = 0;
 	mlx->mlx = mlx_init();
 	if (!mlx->mlx)
 		init_status = EXIT_FAILURE;

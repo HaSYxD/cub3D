@@ -41,10 +41,14 @@ int	mouse_move(int mouse_code, int x, int y, t_mlxctx *mlx)
 
 int	key_press(int key_code, t_mlxctx *mlx)
 {
-	if (key_code == XK_Shift_L || key_code == XK_Control_L)
+	if (key_code == XK_Shift_L || key_code == XK_Control_L
+		|| key_code == XK_Right || key_code == XK_Left
+		|| key_code == XK_Up || key_code == XK_Down)
 		mlx->key_state[0] = key_code;
-	else
+	else if (mlx->key_state[2] != 0 || mlx->key_state[1] == 0)
 		mlx->key_state[1] = key_code;
+	else if (mlx->key_state[1] != 0 || mlx->key_state[2] == 0)
+		mlx->key_state[2] = key_code;
 	if (mlx->key_state[0] == XK_Shift_L)
 	{
 		if (ft_isalpha(mlx->key_state[1]))
@@ -57,9 +61,29 @@ int	key_press(int key_code, t_mlxctx *mlx)
 
 int	key_release(int key_code, t_mlxctx *mlx)
 {
-	if (key_code == XK_Shift_L || key_code == XK_Control_L)
+	if (key_code == XK_Shift_L || key_code == XK_Control_L
+		|| key_code == XK_Right || key_code == XK_Left
+		|| key_code == XK_Up || key_code == XK_Down)
 		mlx->key_state[0] = 0;
-	else
+	else if (mlx->key_state[2] != key_code)
 		mlx->key_state[1] = 0;
+	else if (mlx->key_state[1] != key_code)
+		mlx->key_state[2] = 0;
+	return (0);
+}
+
+int	is_key_down(t_mlxctx *mlx, int key)
+{
+	if (key == XK_Shift_L || key == XK_Control_L
+		|| key == XK_Right || key == XK_Left
+		|| key == XK_Up || key == XK_Down)
+	{
+		if (mlx->key_state[0] == key)
+			return (1);
+	}
+	else if (mlx->key_state[1] == key)
+		return (1);
+	else if (mlx->key_state[2] == key)
+		return (1);
 	return (0);
 }
