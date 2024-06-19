@@ -16,29 +16,13 @@ int	res = 2;
 
 void	draw_minimap(t_cdata *data)
 {
-	t_count	c;
 	int	xscale;
 	int	yscale;
 
-	c = (t_count){-1, -1, 0};
-	xscale = (WIN_W/2) / (data->map_size.x * (WIN_H / 451));
-	yscale = (WIN_H/2) / (data->map_size.y * (WIN_H / 451));
-	square_to_fbuff(data->mlx, (t_rec){0, 0, xscale*data->map_size.x, yscale*data->map_size.y}, (t_color){255, 0, 0, 30});
-	while (++c.i < data->map_size.y)
-	{
-		while (++c.j < data->map_size.x)
-		{
-			if (data->map[c.i][c.j] == '1')
-				square_to_fbuff(data->mlx, (t_rec){c.j * xscale, c.i * yscale,
-					xscale - 1, yscale - 1}, (t_color){255, 0, 0, 255});
-			else if (data->map[c.i][c.j] == '0')
-				square_to_fbuff(data->mlx, (t_rec){c.j * xscale, c.i * yscale,
-					xscale - 1, yscale - 1}, (t_color){255, 0, 0, 55});
-		}
-		c.j = -1;
-	}
+	xscale = (WIN_W/6) / (data->map_size.x * (WIN_H / 451));
+	yscale = (WIN_H/6) / (data->map_size.y * (WIN_H / 451));
 	int	r_num = WIN_W/res;
-	float	fov = M_PI/2;
+	float	fov = M_PI/3;
 	double	dangle = fov / r_num;
 	double	r_angle = data->p_angle - (fov/2) + 0.0001;
 	for (int i = 0; i < r_num; i++){
@@ -97,11 +81,17 @@ void	draw_minimap(t_cdata *data)
 			depth = depth_vert;
 		else
 			depth = depth_hor;
-		line_to_fbuff(data->mlx, (t_vec2){(int)(data->p_pos.x*xscale), (int)(data->p_pos.y*yscale)},
-			(t_vec2){(data->p_pos.x*xscale) + (depth*xscale) * cos(r_angle),
-				(data->p_pos.y*yscale) + (depth*yscale) * sin(r_angle)}, (t_color){55, 255, 255, 255});
+		depth *= cos(data->p_angle - r_angle);
+		// line_to_fbuff(data->mlx, (t_vec2){(int)(data->p_pos.x*xscale), (int)(data->p_pos.y*yscale)},
+		// 	(t_vec2){(data->p_pos.x*xscale) + (depth*xscale) * cos(r_angle),
+		// 		(data->p_pos.y*yscale) + (depth*yscale) * sin(r_angle)}, (t_color){55, 255, 255, 255});
+		double screen_dist = (WIN_W/2) / tan(fov/2);
+		float	proj_height = screen_dist / (depth + 0.0001);
+		t_color c = {255, 255 / (1+pow(depth, 5) * 0.00002), 255 / (1+pow(depth, 5) * 0.00002), 255 / (1+pow(depth, 5) * 0.00002)};
+		square_to_fbuff(data->mlx, (t_rec){i*res, (WIN_H/2) - (int)proj_height / 2, res, proj_height}, c);
 		r_angle += dangle;
 	}
+	image_to_fbuff(&data->mlx->frame_buffer, &data->minimap, (t_vec2){WIN_W/6, WIN_H/6}, (t_vec2){0, 0});
 	circle_to_fbuff(data->mlx, (t_vec2){(data->p_pos.x*xscale),
 		(data->p_pos.y*yscale)}, xscale*0.25, (t_color){255, 255, 0, 0});
 }
@@ -127,15 +117,44 @@ static int	render(t_cdata *data)
 			res = 30;
 	}
 	player_move(data);
-	square_to_fbuff(data->mlx, (t_rec){0, 0, WIN_W, WIN_H/2}, (t_color){255, 255, 0, 0});
-	square_to_fbuff(data->mlx, (t_rec){0, WIN_H/2, WIN_W, WIN_H/2}, (t_color){255, 0, 255, 0});
-	// for (int i = 0; i < WIN_W/res; i++)
-		// square_to_fbuff(data->mlx, (t_rec){i*res, WIN_H/4, res, WIN_H/2}, (t_color){255, 255-i*res, 255-i*res, 255-i*res});
+	square_to_fbuff(data->mlx, (t_rec){0, 0, WIN_W, WIN_H/2}, data->map_col[0]);
+	square_to_fbuff(data->mlx, (t_rec){0, WIN_H/2, WIN_W, WIN_H/2}, data->map_col[1]);
+	// mlx_put_image_to_window(data->mlx->mlx, data->mlx->win, data->minimap.img, 0, 0);
 	draw_minimap(data);
 	mlx_put_image_to_window(data->mlx->mlx, data->mlx->win, data->mlx->frame_buffer.img, 0, 0);
 	// usleep(50000);
 	print_fps_to_consol(data->mlx);
 	return (0);
+}
+
+void	compute_minimap(t_cdata *data)
+{
+	t_count	c;
+	int	xscale;
+	int	yscale;
+
+	c = (t_count){-1, -1, 0};
+	xscale = (WIN_W/6) / (data->map_size.x * (WIN_H / 451));
+	yscale = (WIN_H/6) / (data->map_size.y * (WIN_H / 451));
+	data->minimap.img = mlx_new_image(data->mlx->mlx, WIN_W/6, WIN_H/6);
+	data->minimap.addr = mlx_get_data_addr(data->minimap.img,
+		&data->minimap.bpp, &data->minimap.line_length,
+		&data->minimap.endian);
+	square_to_fbuff(data->mlx, (t_rec){0, 0, xscale*data->map_size.x, yscale*data->map_size.y}, (t_color){255, 0, 0, 30});
+	while (++c.i < data->map_size.y)
+	{
+		while (++c.j < data->map_size.x)
+		{
+			if (data->map[c.i][c.j] == '1')
+				square_to_fbuff(data->mlx, (t_rec){c.j * xscale, c.i * yscale,
+					xscale - 1, yscale - 1}, (t_color){255, 0, 0, 255});
+			else if (data->map[c.i][c.j] == '0')
+				square_to_fbuff(data->mlx, (t_rec){c.j * xscale, c.i * yscale,
+					xscale - 1, yscale - 1}, (t_color){255, 0, 0, 55});
+		}
+		c.j = -1;
+	}
+	image_to_fbuff(&data->minimap, &data->mlx->frame_buffer, (t_vec2){WIN_W/6, WIN_H}, (t_vec2){0, 0});
 }
 
 void	run_cub3d(t_cdata *data)
@@ -145,6 +164,7 @@ void	run_cub3d(t_cdata *data)
 			if (data->map[j][i] == 'N')
 				data->p_pos = (t_vec2){i, j};
 	data->p_angle = -(M_PI/2);
+	compute_minimap(data);
 	mlx_hook(data->mlx->win, KeyPress, KeyPressMask, key_press, data->mlx);
 	mlx_hook(data->mlx->win, KeyRelease, KeyReleaseMask, key_release, data->mlx);
 	mlx_hook(data->mlx->win, ButtonPress, ButtonPressMask, mouse_press, data->mlx);

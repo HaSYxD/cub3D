@@ -128,7 +128,7 @@ void	line_to_fbuff(t_mlxctx *mlx, t_vec2 p1, t_vec2 p2, t_color color);
 void	circle_to_fbuff(t_mlxctx *mlx, t_vec2 pos, float radius, t_color col);
 void	square_to_fbuff(t_mlxctx *mlx, t_rec rec, t_color col);
 void	pixel_to_fbuff(t_mlxctx *mlx, t_vec2 pos, t_color col);
-void	image_to_fbuff(t_mlxctx *mlx, t_img *img, t_vec2 size, t_vec2 pos);
+void	image_to_fbuff(t_img *fbuff, t_img *img, t_vec2 size, t_vec2 pos);
 //drawing functions
 
 void	print_fps_to_consol(t_mlxctx *mlx);

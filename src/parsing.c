@@ -6,7 +6,7 @@
 /*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 16:15:18 by afromont          #+#    #+#             */
-/*   Updated: 2024/06/19 16:56:30 by afromont         ###   ########.fr       */
+/*   Updated: 2024/06/19 20:27:39 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int ft_errorarg(char **agv, int ac)
 	return (0);
 
 }
-
+/*
 unsigned char ft_atoc(char *str)
 {
 	int i;
@@ -48,16 +48,21 @@ unsigned char ft_atoc(char *str)
 		return (printf("Error\nInvalid color\n"), 0);
 	return (res);
 }
-
-void ft_parsargb(char *str, t_cdata *cdata, int i, t_garb *gc)
+*/
+int	ft_parsargb(char *str, t_cdata *cdata, int i, t_garb *gc)
 {
+	t_count	c;
 	char **tmp;
 
 	tmp = ft_split(str, ',', gc);
-	cdata->map_col[i].a = 255;
-	cdata->map_col[i].r = ft_atoc(tmp[0]);
-	cdata->map_col[i].g = ft_atoc(tmp[1]);
-	cdata->map_col[i].b = ft_atoc(tmp[2]);
+	for (int j = 0; tmp[j]; j++)
+		printf("%s\n", tmp[j]);
+	c = (t_count){ft_atoi(tmp[0]), ft_atoi(tmp[1]), ft_atoi(tmp[2])};
+	if (c.i >= 0 && c.i <= 255 && c.j >= 0 && c.j <= 255 && c.k >= 0 && c.k <= 255)
+		cdata->map_col[i] = (t_color){255, c.i, c.j, c.k};
+	else
+		return (1);
+	return (0);
 }
 
 int ft_splittextures(char **tmp, t_garb *gc, t_cdata *cdata)
@@ -80,8 +85,10 @@ int ft_splittextures(char **tmp, t_garb *gc, t_cdata *cdata)
 			}
 		}
 	}
-	ft_parsargb(tmp[4], cdata, 0, gc);
-	ft_parsargb(tmp[5], cdata, 1, gc);
+	if (ft_parsargb(tmp[4], cdata, 1, gc) != 0)
+		return (printf("Error\nInvalid color: %s\n", tmp[4]), 1);
+	if (ft_parsargb(tmp[5], cdata, 0, gc) != 0)
+		return (printf("Error\nInvalid color: %s\n", tmp[5]), 1);
 	return (0);
 }
 
@@ -255,7 +262,7 @@ int mapclose(t_cdata *dat, int i)
 			if (k > start && k < end  && (dat->map[j][start + k] == '0' || dat->map[j][start + k] == 'N' || dat->map[j][start + k] == 'S'
 				|| dat->map[j][start + k] == 'W' || dat->map[j][start + k] == 'E' || dat->map[j][start + k] == '1'))
 				return (1);
-		}				
+		}
 	}
 	return (0);
 }

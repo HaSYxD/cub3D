@@ -21,10 +21,10 @@ void	print_fps_to_consol(t_mlxctx *mlx)
 	if (!start_time)
 		start_time = ft_gettime();
 	sec = ((ft_gettime() - start_time) / 1000);
+	mlx->frame_time = 1 / (frames / sec);
 	if ((frames % (int)(frames / sec)) == 0)
 	{
 		printf("FPS :%f\n", frames / sec);
-		mlx->frame_time = 1 / (frames / sec);
 		start_time = ft_gettime();
 		frames = 1;
 	}

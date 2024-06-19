@@ -27,6 +27,7 @@
 typedef struct s_cdata
 {
 	t_mlxctx	*mlx;
+	t_img	minimap;
 	t_garb	gc;
 	t_vec2	p_pos;
 	double	p_angle;

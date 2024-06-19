@@ -55,15 +55,13 @@ void	circle_to_fbuff(t_mlxctx *mlx, t_vec2 pos, float radius, t_color col)
 	}
 }
 
-void	image_to_fbuff(t_mlxctx *mlx, t_img *img, t_vec2 size, t_vec2 pos)
+void	image_to_fbuff(t_img *fbuff, t_img *img, t_vec2 size, t_vec2 pos)
 {
-	t_img	*fbuff;
 	char	*pixel;
 	int		i;
 	int		limit;
 
 	i = -1;
-	fbuff = &mlx->frame_buffer;
 	limit = (size.x * size.y) * (img->bpp / 8);
 	while (++i < limit)
 	{
