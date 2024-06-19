@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/19 16:15:18 by afromont          #+#    #+#             */
+/*   Updated: 2024/06/19 16:56:30 by afromont         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <cub3d.h>
 #include <cub_editor.h>
 
@@ -17,6 +29,35 @@ int ft_errorarg(char **agv, int ac)
 	}
 	return (0);
 
+}
+
+unsigned char ft_atoc(char *str)
+{
+	int i;
+	unsigned char res;
+
+	i = -1;
+	res = 0;
+	while (str[++i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (printf("Error\nInvalid color\n"), 0);
+		res = res * 10 + str[i] - '0';
+	}
+	if (res > 255)
+		return (printf("Error\nInvalid color\n"), 0);
+	return (res);
+}
+
+void ft_parsargb(char *str, t_cdata *cdata, int i, t_garb *gc)
+{
+	char **tmp;
+
+	tmp = ft_split(str, ',', gc);
+	cdata->map_col[i].a = 255;
+	cdata->map_col[i].r = ft_atoc(tmp[0]);
+	cdata->map_col[i].g = ft_atoc(tmp[1]);
+	cdata->map_col[i].b = ft_atoc(tmp[2]);
 }
 
 int ft_splittextures(char **tmp, t_garb *gc, t_cdata *cdata)
@@ -39,6 +80,8 @@ int ft_splittextures(char **tmp, t_garb *gc, t_cdata *cdata)
 			}
 		}
 	}
+	ft_parsargb(tmp[4], cdata, 0, gc);
+	ft_parsargb(tmp[5], cdata, 1, gc);
 	return (0);
 }
 
@@ -69,10 +112,9 @@ int ft_texturevalide(char *file)
 int ft_textures(t_garb *gc, t_cdata *cdata)
 {
 	int i;
-	char *tmp[4];
+	char *tmp[6];
 
 	i = -1;
-	//tmp = NULL;
 	while (cdata->texture[++i])
 	{
 		if (ft_countw(cdata->texture[i], ' ') != 2)
@@ -87,10 +129,10 @@ int ft_textures(t_garb *gc, t_cdata *cdata)
 			tmp[2] = ft_strdup(cdata->texture[i] + 3, gc);
 		else if (ft_texturevalide(cdata->texture[i]) == 4)
 			tmp[3] = ft_strdup(cdata->texture[i] + 3, gc);
-		/*else if (ft_texturevalide(cdata->texture[i]) == 5)
+		else if (ft_texturevalide(cdata->texture[i]) == 5)
 			tmp[4] = ft_strdup(cdata->texture[i] + 2, gc);
 		else if (ft_texturevalide(cdata->texture[i]) == 6)
-			tmp[5] = ft_strdup(cdata->texture[i] + 2, gc);*/
+			tmp[5] = ft_strdup(cdata->texture[i] + 2, gc);
 	}
 	if (ft_splittextures(tmp, gc, cdata) != 0)
 		return (1);
@@ -183,7 +225,42 @@ void ft_initextures(t_cdata *cdata)
 	cdata->map_col[1] = (t_color){0};
 }
 
-void ft_map(t_garb *gc, t_cdata *cdata)
+int mapclose(t_cdata *dat, int i)
+{
+	int	j;
+	int	k;
+	int start;
+	int end;
+
+	j = -1;
+	start = -1;
+	end = -1;
+	while (dat->map[0][++j])
+		if (dat->map[0][j] != '1' && dat->map[0][j] != ' ')
+			return (1);
+	j = -1;
+	while (dat->map[i - 1][++j])
+		if (dat->map[i - 1][j] != '1' && dat->map[i - 1][j] != ' ')
+			return (1);
+	j = 0;
+	while (++j < i - 1)
+	{
+		k = -1;
+		while (dat->map[j][++k])
+		{
+			if (dat->map[j][k] == ' ' && dat->map[j][k + 1] == '1')
+				start = k + 1;
+			if (dat->map[j][k] == '1' && dat->map[j][k + 1] == ' ')
+				end = k;
+			if (k > start && k < end  && (dat->map[j][start + k] == '0' || dat->map[j][start + k] == 'N' || dat->map[j][start + k] == 'S'
+				|| dat->map[j][start + k] == 'W' || dat->map[j][start + k] == 'E' || dat->map[j][start + k] == '1'))
+				return (1);
+		}				
+	}
+	return (0);
+}
+
+int ft_map(t_garb *gc, t_cdata *cdata)
 {
 	size_t	colon;
 	int		i;
@@ -197,7 +274,9 @@ void ft_map(t_garb *gc, t_cdata *cdata)
 			colon = ft_strlen(cdata->map[i]);
 	}
 	cdata->map_size = (t_vec2){colon, i};
-	printf("map size : %f %f\n", cdata->map_size.x, cdata->map_size.y);
+	if (mapclose(cdata, i) != 0)
+		return (printf("Error\nInvalid map\n"), 1);
+	return (0);
 }
 
 int	ft_cparsing(char **agv, t_garb *gc, t_cdata *cdata)
@@ -214,7 +293,8 @@ int	ft_cparsing(char **agv, t_garb *gc, t_cdata *cdata)
 		if (open(cdata->wall_tex[i], O_RDONLY) == -1)
 			return (printf("Error\nThis texture is invalide: %s\n", cdata->wall_tex[i]), 1);
 	}
-	ft_map(gc, cdata);
+	if (ft_map(gc, cdata) != 0)
+		return (1);
 	return (0);
 }
 
