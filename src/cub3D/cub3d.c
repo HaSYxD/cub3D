@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 01:03:30 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/07 01:03:32 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:02:06 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,23 @@ void	draw_minimap(t_cdata *data)
 			depth_vert+=delta_depth;
 		}
 		float	depth;
-		if (depth_vert < depth_hor)
+		t_color	c;
+		if (depth_vert < depth_hor){
 			depth = depth_vert;
-		else
+			c = (t_color){255, 255 / (1+pow(depth, 5) * 0.00002), 255 / (1+pow(depth, 5) * 0.00002), 255 / (1+pow(depth, 5) * 0.00002)};
+		}
+		else {
 			depth = depth_hor;
+			c = (t_color){255, 200 / (1+pow(depth, 5) * 0.00002), 200 / (1+pow(depth, 5) * 0.00002), 200 / (1+pow(depth, 5) * 0.00002)};
+		}
 		depth *= cos(data->p_angle - r_angle);
 		// line_to_fbuff(data->mlx, (t_vec2){(int)(data->p_pos.x*xscale), (int)(data->p_pos.y*yscale)},
 		// 	(t_vec2){(data->p_pos.x*xscale) + (depth*xscale) * cos(r_angle),
 		// 		(data->p_pos.y*yscale) + (depth*yscale) * sin(r_angle)}, (t_color){55, 255, 255, 255});
 		double screen_dist = (WIN_W/2) / tan(fov/2);
 		float	proj_height = screen_dist / (depth + 0.0001);
-		t_color c = {255, 255 / (1+pow(depth, 5) * 0.00002), 255 / (1+pow(depth, 5) * 0.00002), 255 / (1+pow(depth, 5) * 0.00002)};
+		if (proj_height > WIN_H)
+			proj_height = WIN_H;
 		square_to_fbuff(data->mlx, (t_rec){i*res, (WIN_H/2) - (int)proj_height / 2, res, proj_height}, c);
 		r_angle += dangle;
 	}
