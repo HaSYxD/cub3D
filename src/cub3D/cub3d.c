@@ -12,7 +12,102 @@
 
 #include <cub3d.h>
 
-int	res = 2;
+int	res = 10;
+
+double	get_hor_travel(t_cdata *data, t_vec2 cossin_a)
+{
+	t_vec3	values;
+	t_vec3	ray_pos;
+	int		i;
+
+	i = -1;
+	ray_pos.y = (int)data->p_pos.y - 0.000001;
+	values.y = -1;
+	if (cossin_a.y > 0)
+	{
+		ray_pos.y = (int)data->p_pos.y + 1;
+		values.y = 1;
+	}
+	ray_pos.z = (ray_pos.y - data->p_pos.y) / cossin_a.y;
+	ray_pos.x = data->p_pos.x + ray_pos.z * cossin_a.x;
+	values.z = values.y / cossin_a.y;
+	values.x = values.z * cossin_a.x;
+	while (++i < DRAW_DISTANCE)
+	{
+		if (check_player_to_map_collision(data->map, data->map_size,
+				(t_vec2){ray_pos.x, ray_pos.y}))
+			break ;
+		ray_pos = (t_vec3){ray_pos.x + values.x, ray_pos.y + values.y,
+			ray_pos.z + values.z};
+	}
+	return (ray_pos.z);
+}
+
+double	get_vert_travel(t_cdata *data, t_vec2 cossin_a)
+{
+	t_vec3	ray_pos;
+	t_vec3	values;
+	int		i;
+
+	i = -1;
+	ray_pos.x = (int)data->p_pos.x - 0.000001;
+	values.x = -1;
+	if (cossin_a.x > 0)
+	{
+		ray_pos.x = (int)data->p_pos.x + 1;
+		values.x = 1;
+	}
+	ray_pos.z = (ray_pos.x - data->p_pos.x) / cossin_a.x;
+	ray_pos.y = data->p_pos.y + ray_pos.z * cossin_a.y;
+	values.z = values.x / cossin_a.x;
+	values.y = values.z * cossin_a.y;
+	while (++i < DRAW_DISTANCE)
+	{
+		if (check_player_to_map_collision(data->map, data->map_size,
+				(t_vec2){ray_pos.x, ray_pos.y}))
+			break ;
+		ray_pos = (t_vec3){ray_pos.x + values.x, ray_pos.y + values.y,
+			ray_pos.z + values.z};
+	}
+	return (ray_pos.z);
+}
+
+void	raycasting(t_cdata *data)
+{
+	int	r_num = WIN_W/res;
+	double	dangle = FOV / r_num;
+	double	r_angle = data->p_angle - (FOV/2) + 0.0001;
+	t_vec2	delta_dist;
+
+	for (int i = 0; i < r_num; i++){
+		delta_dist = (t_vec2){get_vert_travel(data, (t_vec2){cos(r_angle), sin(r_angle)}),
+				get_hor_travel(data, (t_vec2){cos(r_angle), sin(r_angle)})};
+		t_color	c;
+		double	depth;
+		float	fog_percent;
+
+		depth = delta_dist.y;
+		fog_percent = 1.0f * (depth / DRAW_DISTANCE);
+		c = (t_color){255, (1.0f - fog_percent) * 150 + fog_percent * data->map_col[0].r,
+			 (1.0f - fog_percent) * 150 + fog_percent * data->map_col[0].g,
+			 (1.0f - fog_percent) * 150 + fog_percent * data->map_col[0].b};
+		if (delta_dist.x < delta_dist.y)
+		{
+			depth = delta_dist.x;
+			fog_percent = 1.0f * (depth / DRAW_DISTANCE);
+			c = (t_color){255, (1.0f - fog_percent) * 255 + fog_percent * data->map_col[0].r,
+				 (1.0f - fog_percent) * 255 + fog_percent * data->map_col[0].g,
+				 (1.0f - fog_percent) * 255 + fog_percent * data->map_col[0].b};
+		}
+		depth *= cos(data->p_angle - r_angle);
+		double screen_dist = (WIN_W/2) / tan(FOV/2);
+		float	proj_height = screen_dist / (depth + 0.0001);
+		if (proj_height > WIN_H)
+			proj_height = WIN_H;
+		square_to_fbuff(data->mlx, (t_rec){i*res, (WIN_H/2) - (int)proj_height / 2, res, proj_height}, c);
+		r_angle += dangle;
+	}
+}
 
 void	draw_minimap(t_cdata *data)
 {
@@ -21,82 +116,6 @@ void	draw_minimap(t_cdata *data)
 
 	xscale = (WIN_W/6) / (data->map_size.x * (WIN_H / 451));
 	yscale = (WIN_H/6) / (data->map_size.y * (WIN_H / 451));
-	int	r_num = WIN_W/res;
-	float	fov = M_PI/3;
-	double	dangle = fov / r_num;
-	double	r_angle = data->p_angle - (fov/2) + 0.0001;
-	for (int i = 0; i < r_num; i++){
-		double sin_a = sin(r_angle);
-		double cos_a = cos(r_angle);
-		//hor
-		float	y_hor;
-		float	dy;
-		if (sin_a > 0){
-			y_hor = (int)data->p_pos.y + 1;
-			dy = 1;
-		}
-		else{
-			y_hor = (int)data->p_pos.y - 0.000001;
-			dy = -1;
-		}
-		float	depth_hor = (y_hor - data->p_pos.y) / sin_a;
-		float	x_hor = data->p_pos.x + depth_hor * cos_a;
-
-		float	delta_depth = dy/sin_a;
-		float	dx = delta_depth * cos_a;
-		for (int i = 0; i < 15; i++){
-			t_vec2	tile_hor = (t_vec2){x_hor, y_hor};
-			if (check_player_to_map_collision(data->map, data->map_size, tile_hor))
-				break ;
-			x_hor+=dx;
-			y_hor+=dy;
-			depth_hor+=delta_depth;
-		}
-		//vert
-		float	x_vert;
-		if (cos_a > 0){
-			x_vert = (int)data->p_pos.x + 1;
-			dx = 1;
-		}
-		else{
-			x_vert = (int)data->p_pos.x - 0.000001;
-			dx = -1;
-		}
-		float	depth_vert = (x_vert - data->p_pos.x) / cos_a;
-		float	y_vert = data->p_pos.y + depth_vert * sin_a;
-
-		delta_depth = dx/cos_a;
-		dy = delta_depth * sin_a;
-		for (int i = 0; i < 15; i++){
-			t_vec2	tile_vert = (t_vec2){x_vert, y_vert};
-			if (check_player_to_map_collision(data->map, data->map_size, tile_vert)){
-				break ;
-			}
-			x_vert+=dx;
-			y_vert+=dy;
-			depth_vert+=delta_depth;
-		}
-		float	depth;
-		t_color	c;
-		if (depth_vert < depth_hor){
-			depth = depth_vert;
-			c = (t_color){255, 255 / (1+pow(depth, 5) * 0.00002), 255 / (1+pow(depth, 5) * 0.00002), 255 / (1+pow(depth, 5) * 0.00002)};
-		}
-		else {
-			depth = depth_hor;
-			c = (t_color){255, 200 / (1+pow(depth, 5) * 0.00002), 200 / (1+pow(depth, 5) * 0.00002), 200 / (1+pow(depth, 5) * 0.00002)};
-		}
-		depth *= cos(data->p_angle - r_angle);
-		// line_to_fbuff(data->mlx, (t_vec2){(int)(data->p_pos.x*xscale), (int)(data->p_pos.y*yscale)},
-		// 	(t_vec2){(data->p_pos.x*xscale) + (depth*xscale) * cos(r_angle),
-		// 		(data->p_pos.y*yscale) + (depth*yscale) * sin(r_angle)}, (t_color){55, 255, 255, 255});
-		double screen_dist = (WIN_W/2) / tan(fov/2);
-		float	proj_height = screen_dist / (depth + 0.0001);
-		if (proj_height > WIN_H)
-			proj_height = WIN_H;
-		square_to_fbuff(data->mlx, (t_rec){i*res, (WIN_H/2) - (int)proj_height / 2, res, proj_height}, c);
-		r_angle += dangle;
-	}
 	image_to_fbuff(&data->mlx->frame_buffer, &data->minimap, (t_vec2){WIN_W/6, WIN_H/6}, (t_vec2){0, 0});
 	circle_to_fbuff(data->mlx, (t_vec2){(data->p_pos.x*xscale),
 		(data->p_pos.y*yscale)}, xscale*0.25, (t_color){255, 255, 0, 0});
@@ -116,19 +135,29 @@ static int	render(t_cdata *data)
 		res--;
 		if (res < 1)
 			res = 1;
+		data->mlx->key_state[0] = 0;
 	}
 	else if (is_key_down(data->mlx, XK_Down)){
 		res++;
-		if (res > 30)
-			res = 30;
+		if (res > 20)
+			res = 20;
+		data->mlx->key_state[0] = 0;
 	}
 	player_move(data);
 	square_to_fbuff(data->mlx, (t_rec){0, 0, WIN_W, WIN_H/2}, data->map_col[0]);
-	square_to_fbuff(data->mlx, (t_rec){0, WIN_H/2, WIN_W, WIN_H/2}, data->map_col[1]);
-	// mlx_put_image_to_window(data->mlx->mlx, data->mlx->win, data->minimap.img, 0, 0);
+	float	fog_percent;
+	float	j = WIN_H/2;
+	for (float i = 0; i < WIN_H/2; i++){
+		fog_percent = 1.0f * (j / WIN_H);
+		square_to_fbuff(data->mlx, (t_rec){0, WIN_H/2 + i, WIN_W, 1}, (t_color){255, (1.0f - fog_percent) * data->map_col[1].r + fog_percent * data->map_col[0].r,
+											(1.0f - fog_percent) * data->map_col[1].g + fog_percent * data->map_col[0].g,
+											(1.0f - fog_percent) * data->map_col[1].b + fog_percent * data->map_col[0].b});
+		j--;
+	}
+	j = WIN_H/2;
+	raycasting(data);
 	draw_minimap(data);
 	mlx_put_image_to_window(data->mlx->mlx, data->mlx->win, data->mlx->frame_buffer.img, 0, 0);
-	// usleep(50000);
 	print_fps_to_consol(data->mlx);
 	return (0);
 }

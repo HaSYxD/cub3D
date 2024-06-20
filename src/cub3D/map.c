@@ -2,19 +2,16 @@
 
 int	check_player_to_map_collision(char **map,t_vec2 msize, t_vec2 dpos)
 {
-	t_count	c;
+	int	x;
+	int	y;
 
-	c = (t_count){-1, -1, 0};
-	while (++c.j < msize.y)
-	{
-		while (++c.i < msize.x)
-		{
-			if (map[c.j][c.i] == '0' || map[c.j][c.i] == 'N' || map[c.j][c.i] == ' ')
-				continue ;
-			if (check_collision_point_rec((t_rec){c.i, c.j, 1, 1}, dpos))
-				return (1);
-		}
-		c.i = -1;
-	}
-	return (0);
+	x = dpos.x;
+	y = dpos.y;
+	if (y >= msize.y || y < 0)
+		return (1);
+	if (x >= (int)ft_strlen(map[y]) || x < 0)
+		return (1);
+	if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == ' ')
+		return (0);
+	return (1);
 }

@@ -17,6 +17,8 @@
 # define WIN_W	1600
 # define WIN_H	900
 # define WIN_N	"cub3D"
+# define FOV	M_PI / 3
+# define DRAW_DISTANCE	20
 //------------------------//
 
 //DEPENDENCIES------------//

@@ -57,6 +57,14 @@ typedef struct s_vec2
 }	t_vec2;
 //to use when working with 2D coordonnates or sizes
 
+typedef struct s_vec3
+{
+	double	x;
+	double	y;
+	double	z;
+}	t_vec3;
+//to use when working with 3D coordonnates or sizes
+
 typedef struct s_rec
 {
 	float	x;
