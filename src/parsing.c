@@ -6,7 +6,7 @@
 /*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 16:15:18 by afromont          #+#    #+#             */
-/*   Updated: 2024/06/21 16:24:49 by afromont         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:17:21 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,9 +258,15 @@ int mapvalide(t_cdata *dat)
 			if ((dat->map[i][j] == 'N' || dat->map[i][j] == 'S' || dat->map[i][j] == 'W' || dat->map[i][j] == 'E') && player == 0)
 			{
 				player = 1;
-				dat->map[i][j] = '0';
 				dat->p_pos = (t_vec2){j + 0.5, i + 0.5};
-				dat->p_angle = (dat->map[i][j] == 'N') ? -(M_PI / 2) : (dat->map[i][j] == 'S') ? (M_PI / 2) : (dat->map[i][j] == 'W') ? M_PI : 0;
+				dat->p_angle = 3 * (M_PI / 2);
+				if (dat->map[i][j] == 'S')
+					dat->p_angle = M_PI / 2;
+				else if (dat->map[i][j] == 'E')
+					dat->p_angle = 0;
+				else if (dat->map[i][j] == 'W')
+					dat->p_angle = M_PI;
+				dat->map[i][j] = '0';
 			}
 			else if ((dat->map[i][j] == 'N' || dat->map[i][j] == 'S' || dat->map[i][j] == 'W' || dat->map[i][j] == 'E') && player == 1)
 				return (1);

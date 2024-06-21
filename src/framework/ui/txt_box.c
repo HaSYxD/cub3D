@@ -44,11 +44,11 @@ void	draw_txtbox(t_txtbox txtbox, t_mlxctx *mlx)
 
 	border = (t_rec){txtbox.body.x - 5, txtbox.body.y - 5,
 		txtbox.body.width + 10, txtbox.body.height + 10};
-	square_to_fbuff(mlx, border, MLX_LGRAY);
-	square_to_fbuff(mlx, txtbox.body, MLX_WHITE);
+	square_to_fbuff(mlx, border, int_to_color(MLX_LGRAY));
+	square_to_fbuff(mlx, txtbox.body, int_to_color(MLX_WHITE));
 	mlx_string_put(mlx->mlx, mlx->win, txtbox.body.x, txtbox.body.y - 5,
-		color_to_int(MLX_WHITE), txtbox.title);
+		MLX_WHITE, txtbox.title);
 	mlx_string_put(mlx->mlx, mlx->win, txtbox.body.x,
 		txtbox.body.y + txtbox.body.height,
-		color_to_int(MLX_BLACK), txtbox.txt);
+		MLX_BLACK, txtbox.txt);
 }

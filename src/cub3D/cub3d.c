@@ -6,7 +6,7 @@
 /*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 01:03:30 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/20 14:02:06 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:15:03 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,6 @@ void	run_cub3d(t_cdata *data)
 		for (int j = 0; j < data->map_size.y; j++)
 			if (data->map[j][i] == 'N')
 				data->p_pos = (t_vec2){i, j};
-	data->p_angle = -(M_PI/2);
 	compute_minimap(data);
 	mlx_hook(data->mlx->win, KeyPress, KeyPressMask, key_press, data->mlx);
 	mlx_hook(data->mlx->win, KeyRelease, KeyReleaseMask, key_release, data->mlx);

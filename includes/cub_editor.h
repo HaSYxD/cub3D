@@ -29,6 +29,8 @@ typedef struct s_edata
 	t_garb		gc;
 	t_mlxctx	*mlx;
 	t_txtbox	txt[6];
+	t_txtbox	file_name;
+	t_button	save_validate;
 	t_button	*grid;
 	int			grid_size;
 	int			grid_len;

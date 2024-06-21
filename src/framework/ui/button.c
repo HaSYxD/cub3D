@@ -43,15 +43,15 @@ void	update_button(t_button *button, int new_state, t_mlxctx *mlx)
 void	draw_button(t_button button, t_mlxctx *mlx)
 {
 	if (button.state == 1)
-		square_to_fbuff(mlx, button.body, MLX_WHITE);
+		square_to_fbuff(mlx, button.body, int_to_color(MLX_WHITE));
 	else if (button.state == 2)
-		square_to_fbuff(mlx, button.body, MLX_LGRAY);
+		square_to_fbuff(mlx, button.body, int_to_color(MLX_LGRAY));
 	else if (button.state == -1)
-		square_to_fbuff(mlx, button.body, MLX_LGRAY);
+		square_to_fbuff(mlx, button.body, int_to_color(MLX_LGRAY));
 	else
-		square_to_fbuff(mlx, button.body, MLX_DGRAY);
+		square_to_fbuff(mlx, button.body, int_to_color(MLX_DGRAY));
 	if (button.title[0])
 		mlx_string_put(mlx->mlx, mlx->win, button.body.x,
 			button.body.y + button.body.height,
-			color_to_int(MLX_RED), button.title);
+			color_to_int(int_to_color(MLX_RED)), button.title);
 }

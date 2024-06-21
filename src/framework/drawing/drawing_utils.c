@@ -19,17 +19,9 @@ int	color_to_int(t_color col)
 
 t_color	int_to_color(int col)
 {
-	t_color	c;
-	int		i;
-
-	i = -1;
-	while (++i < 8)
-		c.r = col << i;
-	while (++i < 16)
-		c.g = col << i;
-	while (++i < 24)
-		c.b = col << i;
-	while (++i < 32)
-		c.a = col << i;
-	return (c);
+	return ((t_color){
+		(col & 0xFF000000) >> 24,
+		(col & 0x00FF0000) >> 16,
+		(col & 0x0000FF00) >> 8,
+		col & 0x000000FF});
 }

@@ -22,13 +22,14 @@
 //------------------------//
 
 //FRAMEWORK TYPES---------//
-# define MLX_RED	(struct s_color){255, 255, 0, 0}
-# define MLX_GREEN	(struct s_color){255, 0, 255, 0}
-# define MLX_BLUE	(struct s_color){255, 0, 0, 255}
-# define MLX_WHITE	(struct s_color){255, 255, 255, 255}
-# define MLX_LGRAY	(struct s_color){255, 150, 150, 150}
-# define MLX_DGRAY	(struct s_color){255, 50, 50, 50}
-# define MLX_BLACK	(struct s_color){255, 0, 0, 0}
+// # define MLX_RED	(struct s_color){255, 255, 0, 0}
+# define MLX_RED	0xFFFF0000
+# define MLX_GREEN	0xFF00FF00
+# define MLX_BLUE	0xFF0000FF
+# define MLX_WHITE	0xFFFFFFFF
+# define MLX_LGRAY	0xFF969696
+# define MLX_DGRAY	0xFF323232
+# define MLX_BLACK	0xFF000000
 //pre defined colors
 
 # define MAX_TXTBOX_LEN	128
