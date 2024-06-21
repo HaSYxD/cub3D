@@ -6,7 +6,7 @@
 /*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 16:15:18 by afromont          #+#    #+#             */
-/*   Updated: 2024/06/19 20:27:39 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:24:49 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,33 +30,13 @@ int ft_errorarg(char **agv, int ac)
 	return (0);
 
 }
-/*
-unsigned char ft_atoc(char *str)
-{
-	int i;
-	unsigned char res;
 
-	i = -1;
-	res = 0;
-	while (str[++i])
-	{
-		if (str[i] < '0' || str[i] > '9')
-			return (printf("Error\nInvalid color\n"), 0);
-		res = res * 10 + str[i] - '0';
-	}
-	if (res > 255)
-		return (printf("Error\nInvalid color\n"), 0);
-	return (res);
-}
-*/
 int	ft_parsargb(char *str, t_cdata *cdata, int i, t_garb *gc)
 {
 	t_count	c;
 	char **tmp;
 
 	tmp = ft_split(str, ',', gc);
-	for (int j = 0; tmp[j]; j++)
-		printf("%s\n", tmp[j]);
 	c = (t_count){ft_atoi(tmp[0]), ft_atoi(tmp[1]), ft_atoi(tmp[2])};
 	if (c.i >= 0 && c.i <= 255 && c.j >= 0 && c.j <= 255 && c.k >= 0 && c.k <= 255)
 		cdata->map_col[i] = (t_color){255, c.i, c.j, c.k};
@@ -164,6 +144,32 @@ int ft_checkmap(char *file)
 	return (0);
 }
 
+char **normalizemap(t_cdata *cdata, t_garb *gc)
+{
+	t_count c;
+	int len;
+	char **map;
+
+	c = (t_count){-1, -1, -1};
+	map = allocate(sizeof(char *) * cdata->map_size.y + 1, gc);
+	while (++c.i < (int)cdata->map_size.y)
+	{
+		len = ft_strlen(cdata->map[c.i]);
+		map[c.i] = allocate(sizeof(char) * cdata->map_size.x + 1, gc);
+		c.j = -1;
+		while (++c.j < (int)cdata->map_size.x)
+		{
+			if (c.j < len)
+				map[c.i][c.j] = cdata->map[c.i][c.j];
+			else
+				map[c.i][c.j] = ' ';
+		}
+		map[c.i][c.j] = '\0';
+	}
+	map[c.i] = NULL;
+	return (map);
+}
+
 void ft_splitfile(char **file, t_garb *gc, t_cdata *cdata)
 {
 	size_t i;
@@ -196,7 +202,7 @@ void ft_splitfile(char **file, t_garb *gc, t_cdata *cdata)
 	cdata->map = file + i + 1;
 }
 
-void ft_readfile(char **agv, t_garb *gc, t_cdata *cdata)
+int ft_readfile(char **agv, t_garb *gc, t_cdata *cdata)
 {
 	int fd;
 	int i;
@@ -216,9 +222,12 @@ void ft_readfile(char **agv, t_garb *gc, t_cdata *cdata)
 		line = ft_strjoin(line, tmp, gc);
 		i++;
 	}
+	if (line[0] == '\0')
+			return (printf("Error\nInvalid file\n"), 1);
 	file = ft_split(line, '\n', gc);
 	close(fd);
 	ft_splitfile(file, gc, cdata);
+	return (0);
 }
 
 void ft_initextures(t_cdata *cdata)
@@ -232,35 +241,40 @@ void ft_initextures(t_cdata *cdata)
 	cdata->map_col[1] = (t_color){0};
 }
 
-int mapclose(t_cdata *dat, int i)
+int mapvalide(t_cdata *dat)
 {
+	int i;
 	int	j;
-	int	k;
-	int start;
-	int end;
+	int player;
 
 	j = -1;
-	start = -1;
-	end = -1;
-	while (dat->map[0][++j])
-		if (dat->map[0][j] != '1' && dat->map[0][j] != ' ')
-			return (1);
-	j = -1;
-	while (dat->map[i - 1][++j])
-		if (dat->map[i - 1][j] != '1' && dat->map[i - 1][j] != ' ')
-			return (1);
-	j = 0;
-	while (++j < i - 1)
+	i = -1;
+	player = 0;
+	while (dat->map[++i])
 	{
-		k = -1;
-		while (dat->map[j][++k])
+		j = -1;
+		while (dat->map[i][++j])
 		{
-			if (dat->map[j][k] == ' ' && dat->map[j][k + 1] == '1')
-				start = k + 1;
-			if (dat->map[j][k] == '1' && dat->map[j][k + 1] == ' ')
-				end = k;
-			if (k > start && k < end  && (dat->map[j][start + k] == '0' || dat->map[j][start + k] == 'N' || dat->map[j][start + k] == 'S'
-				|| dat->map[j][start + k] == 'W' || dat->map[j][start + k] == 'E' || dat->map[j][start + k] == '1'))
+			if ((dat->map[i][j] == 'N' || dat->map[i][j] == 'S' || dat->map[i][j] == 'W' || dat->map[i][j] == 'E') && player == 0)
+			{
+				player = 1;
+				dat->map[i][j] = '0';
+				dat->p_pos = (t_vec2){j + 0.5, i + 0.5};
+				dat->p_angle = (dat->map[i][j] == 'N') ? -(M_PI / 2) : (dat->map[i][j] == 'S') ? (M_PI / 2) : (dat->map[i][j] == 'W') ? M_PI : 0;
+			}
+			else if ((dat->map[i][j] == 'N' || dat->map[i][j] == 'S' || dat->map[i][j] == 'W' || dat->map[i][j] == 'E') && player == 1)
+				return (1);
+			if (i == 0 && (dat->map[i][j] != '1' && dat->map[i][j] != ' ' ))
+				return (1);
+			if (i == dat->map_size.y && (dat->map[i][j] != '1' || dat->map[i][j] != ' '))
+				return (1);
+			if (dat->map[i][j] == '0' && dat->map[i][j + 1] == ' ')
+				return (1);
+			if (dat->map[i][j] == '0' && dat->map[i][j - 1] == ' ')
+				return (1);
+			if (dat->map[i][j] == '0' && dat->map[i + 1][j] == ' ')
+				return (1);
+			if (dat->map[i][j] == '0' && dat->map[i - 1][j] == ' ')
 				return (1);
 		}
 	}
@@ -274,14 +288,14 @@ int ft_map(t_garb *gc, t_cdata *cdata)
 
 	i = -1;
 	colon = 0;
-	(void) gc;
 	while (cdata->map[++i])
 	{
 		if (ft_strlen(cdata->map[i]) > colon)
 			colon = ft_strlen(cdata->map[i]);
 	}
 	cdata->map_size = (t_vec2){colon, i};
-	if (mapclose(cdata, i) != 0)
+	cdata->map = normalizemap(cdata, gc);
+	if (mapvalide(cdata) != 0)
 		return (printf("Error\nInvalid map\n"), 1);
 	return (0);
 }
@@ -291,7 +305,8 @@ int	ft_cparsing(char **agv, t_garb *gc, t_cdata *cdata)
 	int	i;
 
 	i = -1;
-	ft_readfile(agv, gc, cdata);
+	if (ft_readfile(agv, gc, cdata) != 0)
+		return (1);
 	ft_initextures(cdata);
 	if (ft_textures(gc, cdata) != 0)
 		return (1);
