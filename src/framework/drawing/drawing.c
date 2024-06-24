@@ -16,6 +16,8 @@ void	pixel_to_fbuff(t_mlxctx *mlx, t_vec2 pos, t_color col)
 {
 	char	*pixel;
 
+	if ((unsigned int)color_to_int(col) == 0xFF000000)
+		return ;
 	if (pos.x < 0 && pos.y < 0 && pos.x > mlx->win_w && pos.y > mlx->win_h)
 		return ;
 	pixel = mlx->frame_buffer.addr + (int)(pos.y * mlx->frame_buffer.line_length + pos.x

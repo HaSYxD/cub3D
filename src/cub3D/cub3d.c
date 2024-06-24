@@ -44,7 +44,6 @@ static int	render(t_cdata *data)
 	raycasting(data);
 	draw_minimap(data);
 	mlx_put_image_to_window(data->mlx->mlx, data->mlx->win, data->mlx->frame_buffer.img, 0, 0);
-	mlx_put_image_to_window(data->mlx->mlx, data->mlx->win, data->wall_tex_img[0].img, 0, 0);
 	print_fps_to_consol(data->mlx);
 	door_tick++;
 	return (0);

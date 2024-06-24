@@ -1,10 +1,10 @@
-NO ./assets/creeper.xpm
-SO ./assets/creeper.xpm
-WE ./assets/creeper.xpm
-EA ./assets/creeper.xpm
+NO ./assets/backroom-north.xpm
+SO ./assets/backroom-south.xpm
+WE ./assets/backroom-west.xpm
+EA ./assets/backroom-east.xpm
 
-F 0,0,0
-C 204,153,0
+F 176,178,50
+C 176,178,50
 
 11111111111111111111
 10001000000000010001

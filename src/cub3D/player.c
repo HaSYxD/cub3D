@@ -43,6 +43,10 @@ t_vec2	move_hor(t_cdata *data, int dir)
 void	rotate(t_cdata *data, int dir)
 {
 	data->p_angle += data->mlx->frame_time * (4 * dir);
+	if (data->p_angle < 0)
+		data->p_angle += M_PI * 2;
+	if (data->p_angle > M_PI * 2)
+		data->p_angle -= (M_PI * 2);
 }
 
 void	player_move(t_cdata *data)

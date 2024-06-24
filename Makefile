@@ -17,6 +17,7 @@ SRC		= src/main.c\
 		  src/cub3D/cub3d.c\
 		  src/cub3D/player.c\
 		  src/cub3D/rendering.c\
+		  src/cub3D/color_computing.c\
 		  src/cub3D/raycasting.c\
 		  src/editor/editor.c\
 		  src/framework/mlx_context.c\
