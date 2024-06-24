@@ -38,8 +38,9 @@ void	deallocate(void *ptr, t_garb *collector)
 	t_ptr	*data_buff;
 	t_ptr	*buff;
 
+	data_buff = NULL;
 	buff = collector->alloc_ptr;
-	while (collector->alloc_ptr)
+	while (collector->alloc_ptr->next)
 	{
 		if (ptr == collector->alloc_ptr->next->data)
 		{
@@ -47,8 +48,9 @@ void	deallocate(void *ptr, t_garb *collector)
 				printf("[%sINFO%s] Pointer \"%s%p%s\" \
 					as been de-allocated at run-time\n",
 					C_CYAN, C_DEFAULT, C_YELLOW, ptr, C_DEFAULT);
-			data_buff = collector->alloc_ptr->next->next;
 			free(collector->alloc_ptr->next->data);
+			if (collector->alloc_ptr->next->next)
+				data_buff = collector->alloc_ptr->next->next;
 			free(collector->alloc_ptr->next);
 			collector->alloc_ptr->next = data_buff;
 			collector->blocks_num--;

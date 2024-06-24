@@ -15,6 +15,7 @@
 
 //DEPENDENCIES------------//
 # include <X11/keysym.h>
+# include <stdint.h>
 # include <libft.h>
 # include <X11/X.h>
 # include <math.h>
@@ -161,8 +162,10 @@ int		key_release(int key_code, t_mlxctx *mlx);
 int		is_key_down(t_mlxctx *mlx, int key);
 //input	handling functions
 
+t_img	load_xpm(t_mlxctx *mlx, char *path, t_vec2 *size);
 int		init_mlxctx(t_mlxctx *mlx, int w, int h, char *name);
 int		destroy_mlxctx(t_mlxctx *mlx);
+int		start_mlxctx(t_mlxctx *mlx, int (*start_func)(), int (*quit_func)(), void *param);
 //mlx context handling
 //------------------------//
 #endif

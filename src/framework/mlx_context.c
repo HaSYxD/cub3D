@@ -12,6 +12,32 @@
 
 #include <cub_framework.h>
 
+t_img	load_xpm(t_mlxctx *mlx, char *path, t_vec2 *size)
+{
+	t_img	image;
+	int	x;
+	int	y;
+
+	image.img = mlx_xpm_file_to_image(mlx->mlx, path, &x, &y);
+	image.addr = mlx_get_data_addr(image.img, &image.bpp,
+			&image.line_length, &image.endian);
+	size->x = x;
+	size->y = y;
+	return (image);
+}
+
+int	start_mlxctx(t_mlxctx *mlx, int (*start_func)(), int (*quit_func)(), void *param)
+{
+	mlx_hook(mlx->win, KeyPress, KeyPressMask, key_press, mlx);
+	mlx_hook(mlx->win, KeyRelease, KeyReleaseMask, key_release, mlx);
+	mlx_hook(mlx->win, ButtonPress, ButtonPressMask, mouse_press, mlx);
+	mlx_hook(mlx->win, ButtonRelease, ButtonReleaseMask, mouse_release, mlx);
+	mlx_hook(mlx->win, DestroyNotify, StructureNotifyMask, quit_func, param);
+	mlx_loop_hook(mlx->mlx, start_func, param);
+	mlx_loop(mlx->mlx);
+	return (0);
+}
+
 int	destroy_mlxctx(t_mlxctx *mlx)
 {
 	if (mlx->win)

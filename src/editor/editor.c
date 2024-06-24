@@ -32,6 +32,41 @@ static void	fill_grid(int i, t_edata *data)
 		return (fill_grid(i + grid_len, data));
 }
 
+void	write_line(int fd, char *prefix, char *str, char *suffix)
+{
+	if (write(fd, prefix, ft_strlen(prefix)) == -1)
+		return ;
+	if (write(fd, str, ft_strlen(str)) == -1)
+		return ;
+	if (write(fd, suffix, ft_strlen(suffix)) == -1)
+		return ;
+}
+
+void	write_map_line(int fd, t_edata *data, int i)
+{
+	char	*line;
+	int	j;
+
+	j = -1;
+	line = allocate(sizeof(char) * (data->grid_len + 1), &data->gc);
+	while (++j < data->grid_len)
+	{
+		if (data->grid[i].state == 1)
+			line[j] = '1';
+		else if (data->grid[i].state == 2)
+			line[j] = '0';
+		else if (data->grid[i].state == 0)
+			line[j] = ' ';
+		i++;
+	}
+	line[j] = 0;
+	if (write(fd, line, data->grid_len + 1) == -1)
+		printf("failed\n");
+	if (write(fd, "\n", 1) == -1)
+		printf("failed\n");
+	deallocate(line, &data->gc);
+}
+
 void	save_file(t_edata *data)
 {
 	int	fd;
@@ -48,15 +83,15 @@ void	save_file(t_edata *data)
 	}
 	if (data->save_validate.state == 1)
 	{
-		fd = open(data->file_name.txt, O_RDWR | O_CREAT | O_APPEND, 0655);
-		if (write(fd, "NO ./assets/creeper.xpm\n", 24) == -1)
-			printf("failed to write to file");
-		if (write(fd, "SO ./assets/creeper.xpm\n", 24) == -1)
-			printf("failed to write to file");
-		if (write(fd, "WE ./assets/creeper.xpm\n", 24) == -1)
-			printf("failed to write to file");
-		if (write(fd, "EA ./assets/creeper.xpm\n", 24) == -1)
-			printf("failed to write to file");
+		fd = open(data->file_name.txt, O_RDWR | O_CREAT | O_APPEND, 0644);
+		write_line(fd, "NO ", data->txt[0].txt, "\n");
+		write_line(fd, "SO ", data->txt[1].txt, "\n");
+		write_line(fd, "WE ", data->txt[2].txt, "\n");
+		write_line(fd, "EA ", data->txt[3].txt, "\n\n");
+		write_line(fd, "F ", data->txt[4].txt, "\n");
+		write_line(fd, "C ", data->txt[5].txt, "\n\n");
+		for (int i = 0; i < data->grid_size; i += data->grid_len)
+			write_map_line(fd, data, i);
 		close(fd);
 		test.state = 0;
 		data->save_validate.state = 0;
@@ -138,14 +173,7 @@ void	run_editor(t_mlxctx *mlx, char *argv[])
 		destroy_mlxctx(mlx);
 		return ;
 	}
-	printf("%ld\n", sizeof(t_mlxctx *));
 	data.mlx = mlx;
 	test = get_button((t_rec){20, 600, 300, 50}, "ceci est un test", TOGGLE);
-	mlx_hook(mlx->win, KeyPress, KeyPressMask, key_press, mlx);
-	mlx_hook(mlx->win, KeyRelease, KeyReleaseMask, key_release, mlx);
-	mlx_hook(mlx->win, ButtonPress, ButtonPressMask, mouse_press, mlx);
-	mlx_hook(mlx->win, ButtonRelease, ButtonReleaseMask, mouse_release, mlx);
-	mlx_loop_hook(mlx->mlx, &render, &data);
-	mlx_hook(mlx->win, DestroyNotify, StructureNotifyMask, exit_cub_editor, &data);
-	mlx_loop(mlx->mlx);
+	start_mlxctx(data.mlx, render, exit_cub_editor, &data);
 }

@@ -14,26 +14,27 @@
 
 void	pixel_to_fbuff(t_mlxctx *mlx, t_vec2 pos, t_color col)
 {
-	t_img	*fbuff;
 	char	*pixel;
 
-	fbuff = &mlx->frame_buffer;
-	if (pos.x >= 0 && pos.y >= 0 && pos.x <= mlx->win_w && pos.y <= mlx->win_h)
-	{
-		pixel = fbuff->addr + (int)(pos.y * fbuff->line_length + pos.x
-				* (fbuff->bpp / 8));
-		*(int *)pixel = color_to_int(col);
-	}
+	if (pos.x < 0 && pos.y < 0 && pos.x > mlx->win_w && pos.y > mlx->win_h)
+		return ;
+	pixel = mlx->frame_buffer.addr + (int)(pos.y * mlx->frame_buffer.line_length + pos.x
+			* (mlx->frame_buffer.bpp * 0.125));
+	*(int *)pixel = color_to_int(col);
 }
 
 void	square_to_fbuff(t_mlxctx *mlx, t_rec rec, t_color col)
 {
 	t_vec2	pos_buff;
+	int	x_max;
+	int	y_max;
 
+	x_max = rec.x + rec.width;
+	y_max = rec.y + rec.height;
 	pos_buff = (t_vec2){rec.x - 1, rec.y - 1};
-	while (++pos_buff.y < (rec.y + rec.height))
+	while (++pos_buff.y < y_max)
 	{
-		while (++pos_buff.x < (rec.x + rec.width))
+		while (++pos_buff.x < x_max)
 			pixel_to_fbuff(mlx, pos_buff, col);
 		pos_buff.x = rec.x - 1;
 	}
@@ -41,10 +42,8 @@ void	square_to_fbuff(t_mlxctx *mlx, t_rec rec, t_color col)
 
 void	circle_to_fbuff(t_mlxctx *mlx, t_vec2 pos, float radius, t_color col)
 {
-	// t_count	c;
 	t_vec2	pos_buff;
 
-	// c = (t_count){pos.x - radius - 1, pos.y - radius - 1, 0};
 	pos_buff = (t_vec2){pos.x - radius - 1, pos.y - radius - 1};
 	while (++pos_buff.y < (pos.y + (radius * 2)))
 	{
