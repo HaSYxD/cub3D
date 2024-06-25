@@ -13,6 +13,8 @@
 NAME	= cub3D
 SRC		= src/main.c\
 		  src/parsing.c\
+		  src/texture.c\
+		  src/mappars.c\
 		  src/cub3D/map.c\
 		  src/cub3D/cub3d.c\
 		  src/cub3D/player.c\

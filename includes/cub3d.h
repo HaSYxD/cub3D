@@ -6,7 +6,7 @@
 /*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 01:03:36 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/17 16:35:41 by afromont         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:56:46 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,12 @@ void	player_move(t_cdata *data);
 int ft_errorarg(char **agv, int argc);
 
 int	ft_cparsing(char **agv, t_garb *gc, t_cdata *cdata);
+
+int ft_map(t_garb *gc, t_cdata *cdata);
+
+int ft_textures(t_garb *gc, t_cdata *cdata);
+
+void ft_initextures(t_cdata *cdata);
 
 //int	ft_eparsing(char **agv, t_garb *gc, t_edata *edata);
 
