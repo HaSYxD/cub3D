@@ -6,27 +6,11 @@
 /*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:17:27 by afromont          #+#    #+#             */
-/*   Updated: 2024/06/24 17:16:08 by afromont         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:33:36 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
-
-char	*extendmap(char *str, int len, t_garb *gc)
-{
-	char	*tmp;
-	int		i;
-
-	i = -1;
-	tmp = allocate(sizeof(char) * len + 1, gc);
-	while (str[++i])
-		tmp[i] = str[i];
-	while (i < len)
-		tmp[i++] = ' ';
-	tmp[i] = '\0';
-	deallocate(str, gc);
-	return (tmp);
-}
 
 void	normalizemap(t_cdata *cdata, t_garb *gc)
 {
@@ -40,6 +24,40 @@ void	normalizemap(t_cdata *cdata, t_garb *gc)
 	}
 }
 
+void	takepositionplayer(t_cdata *dat, int i, int j)
+{
+	dat->p_pos = (t_vec2){j + 0.5, i + 0.5};
+	dat->p_angle = 3 * (M_PI / 2);
+	if (dat->map[i][j] == 'S')
+		dat->p_angle = M_PI / 2;
+	else if (dat->map[i][j] == 'E')
+		dat->p_angle = 0;
+	else if (dat->map[i][j] == 'W')
+		dat->p_angle = M_PI;
+}
+
+int	outofmap(t_cdata *dat, int i, int j)
+{
+	if (i == 0 && (dat->map[i][j] != '1' && dat->map[i][j] != ' ' ))
+		return (1);
+	if (i == dat->map_size.y && (dat->map[i][j] != '1'
+		|| dat->map[i][j] != ' '))
+		return (1);
+	if ((dat->map[i][j] == '0' || isplayer(dat->map[i][j]))
+		&& outmap(dat->map[i][j + 1]))
+		return (1);
+	if ((dat->map[i][j] == '0' || isplayer(dat->map[i][j]))
+		&& outmap(dat->map[i][j - 1]))
+		return (1);
+	if ((dat->map[i][j] == '0' || isplayer(dat->map[i][j]))
+		&& outmap(dat->map[i + 1][j]))
+		return (1);
+	if ((dat->map[i][j] == '0' || isplayer(dat->map[i][j]))
+		&& outmap(dat->map[i - 1][j]))
+		return (1);
+	return (0);
+}
+
 int	mapvalide(t_cdata *dat)
 {
 	t_count	c;
@@ -50,35 +68,20 @@ int	mapvalide(t_cdata *dat)
 		c.j = -1;
 		while (dat->map[c.i][++c.j])
 		{
-			if ((dat->map[c.i][c.j] == 'N' || dat->map[c.i][c.j] == 'S' || dat->map[c.i][c.j] == 'W' || dat->map[c.i][c.j] == 'E') && c.k == 0)
+			if (isplayer(dat->map[c.i][c.j]) && c.k == 0)
 			{
 				c.k = 1;
-				dat->p_pos = (t_vec2){c.j + 0.5, c.i + 0.5};
-				dat->p_angle = 3 * (M_PI / 2);
-				if (dat->map[c.i][c.j] == 'S')
-					dat->p_angle = M_PI / 2;
-				else if (dat->map[c.i][c.j] == 'E')
-					dat->p_angle = 0;
-				else if (dat->map[c.i][c.j] == 'W')
-					dat->p_angle = M_PI;
+				takepositionplayer(dat, c.i, c.j);
 				dat->map[c.i][c.j] = '0';
 			}
-			else if ((dat->map[c.i][c.j] == 'N' || dat->map[c.i][c.j] == 'S' || dat->map[c.i][c.j] == 'W' || dat->map[c.i][c.j] == 'E') && c.k == 1)
+			else if (isplayer(dat->map[c.i][c.j]) && c.k == 1)
 				return (1);
-			if (c.i == 0 && (dat->map[c.i][c.j] != '1' && dat->map[c.i][c.j] != ' ' ))
-				return (1);
-			if (c.i == dat->map_size.y && (dat->map[c.i][c.j] != '1' || dat->map[c.i][c.j] != ' '))
-				return (1);
-			if (dat->map[c.i][c.j] == '0' && dat->map[c.i][c.j + 1] == ' ')
-				return (1);
-			if (dat->map[c.i][c.j] == '0' && dat->map[c.i][c.j - 1] == ' ')
-				return (1);
-			if (dat->map[c.i][c.j] == '0' && dat->map[c.i + 1][c.j] == ' ')
-				return (1);
-			if (dat->map[c.i][c.j] == '0' && dat->map[c.i - 1][c.j] == ' ')
+			if (outofmap(dat, c.i, c.j) != 0)
 				return (1);
 		}
 	}
+	if (c.k == 0)
+		return (1);
 	return (0);
 }
 
@@ -86,12 +89,9 @@ int	ft_map(t_garb *gc, t_cdata *cdata)
 {
 	size_t	colon;
 	int		i;
-	int		j;
 
 	i = -1;
-	j = -1;
 	colon = 0;
-	(void)gc;
 	while (cdata->map[++i])
 		if (ft_strlen(cdata->map[i]) > colon)
 			colon = ft_strlen(cdata->map[i]);

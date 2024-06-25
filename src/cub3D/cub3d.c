@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 01:03:30 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/21 17:15:03 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/06/25 13:18:57 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@ t_vec2	creeper_size;
 int	exit_cub3d(t_cdata *data)
 {
 	mlx_destroy_image(data->mlx->mlx, data->minimap.img);
+	mlx_destroy_image(data->mlx->mlx, data->wall_tex_img[0].img);
+	mlx_destroy_image(data->mlx->mlx, data->wall_tex_img[1].img);
+	mlx_destroy_image(data->mlx->mlx, data->wall_tex_img[2].img);
+	mlx_destroy_image(data->mlx->mlx, data->wall_tex_img[3].img);
 	destroy_mlxctx(data->mlx);
 	clean_garbage(&data->gc);
 	exit(0);

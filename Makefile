@@ -3,18 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: afromont <afromont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/07 01:04:22 by aliaudet          #+#    #+#              #
-#    Updated: 2024/06/07 01:04:27 by aliaudet         ###   ########.fr        #
+#    Updated: 2024/06/25 15:36:09 by afromont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= cub3D
 SRC		= src/main.c\
-		  src/parsing.c\
-		  src/texture.c\
-		  src/mappars.c\
+		  src/parsing/parsing.c\
+		  src/parsing/texture.c\
+		  src/parsing/mappars.c\
+		  src/parsing/utilsparsing.c\
 		  src/cub3D/map.c\
 		  src/cub3D/cub3d.c\
 		  src/cub3D/player.c\

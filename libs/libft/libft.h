@@ -6,7 +6,7 @@
 /*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 16:15:24 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/17 15:02:38 by afromont         ###   ########.fr       */
+/*   Updated: 2024/06/25 12:31:26 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int		ft_isprint(int c);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
 int		ft_atoi(const char *str);
+int 	ft_ptoi(char **str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int		ft_lstsize(t_list *lst);
