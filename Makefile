@@ -6,7 +6,7 @@
 #    By: afromont <afromont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/07 01:04:22 by aliaudet          #+#    #+#              #
-#    Updated: 2024/06/26 13:47:23 by aliaudet         ###   ########.fr        #
+#    Updated: 2024/07/03 16:49:28 by afromont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,7 @@ clean:
 	@if test -d ./libs/minilibx-linux; then\
 		cd libs/minilibx-linux;make clean;\
 	fi
-	${RM} ${OBJS}
+	${RM} ${OBJS} ${OBJSCUB} ${OBJSBONUS}
 fclean: clean
 	@cd libs/libft;make fclean
 	${RM} ${NAME}
