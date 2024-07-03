@@ -40,8 +40,7 @@ int	ft_parsargb(char *str, t_cdata *cdata, int i, t_garb *gc)
 			tmp[c.i++] = ft_ptoi(&str);
 		str++;
 	}
-	if (tmp[0] >= 0 && tmp[0] <= 255 && tmp[1] >= 0
-		&& tmp[1] <= 255 && tmp[2] >= 0 && tmp[2] <= 255)
+	if (tmp[0] <= 255 && tmp[1] <= 255 && tmp[2] <= 255)
 		cdata->map_col[i] = (t_color){254, tmp[0], tmp[1], tmp[2]};
 	else
 		return (1);

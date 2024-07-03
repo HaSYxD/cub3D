@@ -6,7 +6,7 @@
 /*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 22:40:21 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/16 22:42:16 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/07/02 18:44:30 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 //------------------------//
 
 //FRAMEWORK TYPES---------//
-// # define MLX_RED	(struct s_color){255, 255, 0, 0}
 # define MLX_RED	0xFFFF0000
 # define MLX_GREEN	0xFF00FF00
 # define MLX_BLUE	0xFF0000FF
@@ -112,6 +111,17 @@ typedef struct s_button
 }	t_button;
 //interactive rectangle
 
+typedef struct s_slidebar
+{
+	t_rec	body;
+	t_vec2	knob_pos;
+	char	*title;
+	int		min_value;
+	int		max_value;
+	int		current_value;
+}	t_slidebar;
+//interactive rectangle
+
 typedef struct s_mlxctx
 {
 	double	frame_time;
@@ -144,28 +154,32 @@ void	image_to_fbuff(t_img *fbuff, t_img *img, t_vec2 size, t_vec2 pos);
 void	print_fps_to_consol(t_mlxctx *mlx);
 //monitoring functions
 
-t_button	get_button(t_rec body, char *title, int type);
-void	update_button(t_button *button, int new_state, t_mlxctx *mlx);
-void	draw_button(t_button button, t_mlxctx *mlx);
-t_txtbox	get_txtbox(t_rec body, char *title);
-void	update_txtbox(t_txtbox *txtbox, t_mlxctx *mlx);
-void	draw_txtbox(t_txtbox txtbox, t_mlxctx *mlx);
+// t_button	get_button(t_rec body, char *title, int type);
+// void	update_button(t_button *button, int new_state, t_mlxctx *mlx);
+// void	draw_button(t_button button, t_mlxctx *mlx);
+// t_txtbox	get_txtbox(t_rec body, char *title);
+// void	update_txtbox(t_txtbox *txtbox, t_mlxctx *mlx);
+// void	draw_txtbox(t_txtbox txtbox, t_mlxctx *mlx);
 //ui functions
 
 int		check_collision_point_rec(t_rec rec, t_vec2 point);
+int		check_collision_point_circle(t_vec2 center, float radius, t_vec2 point);
 //collision functions
 
+void	update_mouse_pos(t_mlxctx *mlx);
 int		mouse_press(int mouse_code, int x, int y, t_mlxctx *mlx);
 int		mouse_release(int mouse_code, int x, int y, t_mlxctx *mlx);
 int		key_press(int key_code, t_mlxctx *mlx);
 int		key_release(int key_code, t_mlxctx *mlx);
 int		is_key_down(t_mlxctx *mlx, int key);
+int		is_key_pressed(t_mlxctx *mlx, int key);
 //input	handling functions
 
-t_img	load_xpm(t_mlxctx *mlx, char *path, t_vec2 *size);
+t_img	load_xpm(t_mlxctx *mlx, char *path, int *size);
 int		init_mlxctx(t_mlxctx *mlx, int w, int h, char *name);
 int		destroy_mlxctx(t_mlxctx *mlx);
-int		start_mlxctx(t_mlxctx *mlx, int (*start_func)(), int (*quit_func)(), void *param);
+int		start_mlxctx(t_mlxctx *mlx, int (*start_func)(),
+			int (*quit_func)(), void *param);
 //mlx context handling
 //------------------------//
 #endif

@@ -30,15 +30,6 @@ int	mouse_release(int mouse_code, int x, int y, t_mlxctx *mlx)
 	return (0);
 }
 
-int	mouse_move(int mouse_code, int x, int y, t_mlxctx *mlx)
-{
-	(void)mouse_code;
-	(void)x;
-	(void)y;
-	mlx->mouse_state = 0;
-	return (0);
-}
-
 int	key_press(int key_code, t_mlxctx *mlx)
 {
 	if (key_code == XK_Shift_L || key_code == XK_Control_L
@@ -69,21 +60,5 @@ int	key_release(int key_code, t_mlxctx *mlx)
 		mlx->key_state[1] = 0;
 	else if (mlx->key_state[1] != key_code)
 		mlx->key_state[2] = 0;
-	return (0);
-}
-
-int	is_key_down(t_mlxctx *mlx, int key)
-{
-	if (key == XK_Shift_L || key == XK_Control_L
-		|| key == XK_Right || key == XK_Left
-		|| key == XK_Up || key == XK_Down)
-	{
-		if (mlx->key_state[0] == key)
-			return (1);
-	}
-	else if (mlx->key_state[1] == key)
-		return (1);
-	else if (mlx->key_state[2] == key)
-		return (1);
 	return (0);
 }

@@ -38,20 +38,11 @@ SRC = ft_isalpha.c\
       ft_domstr.c\
       ft_close.c\
       ft_free.c\
-      ft_gettime.c\
       gnl.c\
       gnl_utils.c\
       garbage_collector.c
 
-BONUS = ft_lstnew.c\
-	ft_lstadd_front.c\
-	ft_lstsize.c\
-	ft_lstlast.c\
-	ft_lstadd_back.c\
-	ft_lstdelone.c\
-	ft_lstclear.c\
-	ft_lstiter.c\
-	ft_lstmap.c
+BONUS = ft_gettime.c
 
 OBJS = ${SRC:.c=.o}
 OBJSBONUS = ${BONUS:.c=.o}

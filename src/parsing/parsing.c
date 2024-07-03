@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <cub3d.h>
-#include <cub_editor.h>
 
 int	ft_checkmap(char *file)
 {

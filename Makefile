@@ -6,7 +6,7 @@
 #    By: afromont <afromont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/07 01:04:22 by aliaudet          #+#    #+#              #
-#    Updated: 2024/06/25 15:36:09 by afromont         ###   ########.fr        #
+#    Updated: 2024/06/26 13:47:23 by aliaudet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,23 +17,27 @@ SRC		= src/main.c\
 		  src/parsing/mappars.c\
 		  src/parsing/utilsparsing.c\
 		  src/cub3D/map.c\
-		  src/cub3D/cub3d.c\
+		  src/cub3D/mouse.c\
 		  src/cub3D/player.c\
 		  src/cub3D/rendering.c\
 		  src/cub3D/color_computing.c\
 		  src/cub3D/raycasting.c\
-		  src/editor/editor.c\
 		  src/framework/mlx_context.c\
 		  src/framework/inputs.c\
+		  src/framework/inputs2.c\
 		  src/framework/collision.c\
-		  src/framework/monitoring.c\
-		  src/framework/ui/button.c\
-		  src/framework/ui/txt_box.c\
 		  src/framework/drawing/drawing.c\
-		  src/framework/drawing/draw_line.c\
 		  src/framework/drawing/drawing_utils.c\
 		  src/framework/math/cub_math.c
 OBJS	= $(SRC:.c=.o)
+
+CUB = src/cub3D/cub3d.c
+OBJSCUB = $(CUB:.c=.o)
+
+SRC_BONUS = src/cub3D/cub3d_bonus.c\
+	    src/framework/monitoring_bonus.c
+OBJSBONUS = $(SRC_BONUS:.c=.o)
+
 CC		= cc
 RM		= rm -f
 CFLAGS	= -Wall -Werror -Wextra -g -O3
@@ -44,10 +48,14 @@ clone:
 	@if ! test -d ./libs/minilibx-linux; then\
 		cd libs;git clone git@github.com:42Paris/minilibx-linux.git;\
 	fi
-$(NAME): ${OBJS}
+$(NAME): ${OBJS} ${OBJSCUB}
 	@cd libs/libft;make
 	@cd libs/minilibx-linux;make
-	${CC} ${OBJS} -o ${NAME} ${CFLAGS} ${INCLUDES} ${LIBS}
+	${CC} ${OBJS} ${OBJSCUB} -o ${NAME} ${CFLAGS} ${INCLUDES} ${LIBS}
+bonus: ${OBJS} ${OBJSBONUS}
+	@cd libs/libft;make bonus
+	@cd libs/minilibx-linux;make
+	${CC} ${OBJS} ${OBJSBONUS} -o ${NAME} ${CFLAGS} ${INCLUDES} ${LIBS}
 %.o: %.c
 	${CC} ${CFLAGS} ${INCLUDES} -c $< -o $@
 clean:

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_collector.h                                :+:      :+:    :+:   */
+/*   libgc.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:39:00 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/05/14 16:39:02 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/07/02 18:42:02 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GARBAGE_COLLECTOR_H
-# define GARBAGE_COLLECTOR_H
+#ifndef LIBGC_H
+# define LIBGC_H
 
 # include <stdlib.h>
 # include <stdio.h>

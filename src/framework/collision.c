@@ -19,3 +19,10 @@ int	check_collision_point_rec(t_rec rec, t_vec2 point)
 		return (1);
 	return (0);
 }
+
+int	check_collision_point_circle(t_vec2 center, float radius, t_vec2 point)
+{
+	if (vec2_dst(center, point) <= radius)
+		return (1);
+	return (0);
+}

@@ -19,9 +19,9 @@ t_color	compute_wall_fog(t_color fog_col, t_color wall_col,
 
 	fog_percent = 1.0f * (dst / draw_dst);
 	return ((t_color){254,
-		(1.0f - fog_percent) * wall_col.r + fog_percent * fog_col.r,
-		(1.0f - fog_percent) * wall_col.g + fog_percent * fog_col.g,
-		(1.0f - fog_percent) * wall_col.b + fog_percent * fog_col.b});
+		(1.0f - fog_percent) * wall_col.r + (fog_percent * fog_col.r),
+		(1.0f - fog_percent) * wall_col.g + (fog_percent * fog_col.g),
+		(1.0f - fog_percent) * wall_col.b + (fog_percent * fog_col.b)});
 }
 
 t_color	compute_floor_fog(t_color fog_col, t_color floor_col, float depth)
@@ -45,19 +45,35 @@ t_color	get_texture_color(t_cdata *data, int i, int x, int y)
 	return (int_to_color(*(int *)pixel));
 }
 
+t_color	color_reduction(t_color c, uint8_t value)
+{
+	if (value == 0)
+		return (c);
+	return ((t_color){.a = c.a,
+		.r = c.r - (c.r / value),
+		.g = c.g - (c.g / value),
+		.b = c.b - (c.b / value),
+	});
+}
+
 t_color	select_basecolor(t_cdata *data, double depth, int dir, int y)
 {
+	t_color	c;
+
 	if (dir == NORTH)
-		return (compute_wall_fog(data->map_col[0], get_texture_color(data, 0, data->hor_tex_offset, y),
-			depth, data->draw_distance));
+		c = color_reduction(get_texture_color(data, 0,
+					data->hor_tex_offset, y), data->hor_shading);
 	else if (dir == EAST)
-		return (compute_wall_fog(data->map_col[0], get_texture_color(data, 3, data->vert_tex_offset, y),
-			depth, data->draw_distance));
+		c = color_reduction(get_texture_color(data, 3,
+					data->vert_tex_offset, y), data->vert_shading);
 	else if (dir == SOUTH)
-		return (compute_wall_fog(data->map_col[0], get_texture_color(data, 2, data->hor_tex_offset, y),
-			depth, data->draw_distance));
+		c = color_reduction(get_texture_color(data, 2,
+					data->hor_tex_offset, y), data->hor_shading);
 	else if (dir == WEST)
-		return (compute_wall_fog(data->map_col[0], get_texture_color(data, 1, data->vert_tex_offset, y),
+		c = color_reduction(get_texture_color(data, 1,
+					data->vert_tex_offset, y), data->vert_shading);
+	else
+		c = (t_color){254, 0, 0, 0};
+	return (compute_wall_fog(data->fog_col, c,
 			depth, data->draw_distance));
-	return (int_to_color(MLX_BLACK));
 }

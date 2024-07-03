@@ -12,21 +12,23 @@
 
 #include <cub_framework.h>
 
-t_img	load_xpm(t_mlxctx *mlx, char *path, t_vec2 *size)
+t_img	load_xpm(t_mlxctx *mlx, char *path, int *size)
 {
 	t_img	image;
-	int	x;
-	int	y;
+	int		res_buff;
 
-	image.img = mlx_xpm_file_to_image(mlx->mlx, path, &x, &y);
+	image.img = mlx_xpm_file_to_image(mlx->mlx, path, &res_buff, &res_buff);
 	image.addr = mlx_get_data_addr(image.img, &image.bpp,
 			&image.line_length, &image.endian);
-	size->x = x;
-	size->y = y;
+	if (*size == 0)
+		*size = res_buff;
+	if (*size > res_buff)
+		*size = res_buff;
 	return (image);
 }
 
-int	start_mlxctx(t_mlxctx *mlx, int (*start_func)(), int (*quit_func)(), void *param)
+int	start_mlxctx(t_mlxctx *mlx, int (*start_func)(),
+	int (*quit_func)(), void *param)
 {
 	mlx_hook(mlx->win, KeyPress, KeyPressMask, key_press, mlx);
 	mlx_hook(mlx->win, KeyRelease, KeyReleaseMask, key_release, mlx);
@@ -54,32 +56,26 @@ int	destroy_mlxctx(t_mlxctx *mlx)
 
 int	init_mlxctx(t_mlxctx *mlx, int w, int h, char *name)
 {
-	int	init_status;
-
-	init_status = 0;
 	mlx->win_w = w;
 	mlx->win_h = h;
 	mlx->mouse_state = 0;
 	mlx->key_state[0] = 0;
 	mlx->key_state[1] = 0;
 	mlx->key_state[2] = 0;
+	mlx->mouse_position = (t_vec2){0, 0};
+	mlx->frame_time = 0.01667;
 	mlx->mlx = mlx_init();
 	if (!mlx->mlx)
-		init_status = EXIT_FAILURE;
-	if (init_status != EXIT_FAILURE)
-		mlx->win = mlx_new_window(mlx->mlx, w, h, name);
+		return (EXIT_FAILURE);
+	mlx->win = mlx_new_window(mlx->mlx, w, h, name);
 	if (!mlx->win)
-		init_status = EXIT_FAILURE;
-	if (init_status != EXIT_FAILURE)
-		mlx->frame_buffer.img = mlx_new_image(mlx->mlx, w, h);
+		return (EXIT_FAILURE);
+	mlx->frame_buffer.img = mlx_new_image(mlx->mlx, w, h);
 	if (!mlx->frame_buffer.img)
-		init_status = EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	mlx->frame_buffer.addr = mlx_get_data_addr(mlx->frame_buffer.img,
 			&mlx->frame_buffer.bpp, &mlx->frame_buffer.line_length,
 			&mlx->frame_buffer.endian);
-	if (!mlx->frame_buffer.addr)
-		init_status = EXIT_FAILURE;
-	if (init_status != EXIT_FAILURE)
-		mlx_set_font(mlx->mlx, mlx->win, FONT);
-	return (init_status);
+	mlx_set_font(mlx->mlx, mlx->win, FONT);
+	return (0);
 }

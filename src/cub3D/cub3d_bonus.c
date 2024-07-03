@@ -40,6 +40,7 @@ static int	update(t_cdata *data)
 	render_game(data);
 	mouse_control(data);
 	player_move(data);
+	print_fps_to_consol(data->mlx);
 	return (0);
 }
 

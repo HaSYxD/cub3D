@@ -6,7 +6,7 @@
 /*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:57:44 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/23 14:57:45 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/07/02 22:48:21 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@ int	get_raydir_hor(t_vec3 ray_pos, double sin, t_cdata *data)
 	if (sin > 0)
 	{
 		dir = NORTH;
-		data->hor_tex_offset = TEX_RES - (int)(ray_pos.x * TEX_RES) % TEX_RES;
+		data->hor_tex_offset = (data->img_size - 1)
+			- (int)(ray_pos.x * data->img_size) % data->img_size;
 	}
 	if (ray_pos.y > (int)ray_pos.y)
 	{
 		dir = SOUTH;
-		data->hor_tex_offset = (int)(ray_pos.x * TEX_RES) % TEX_RES;
+		data->hor_tex_offset = (int)(ray_pos.x * data->img_size)
+			% data->img_size;
 	}
 	return (dir);
 }
@@ -39,7 +41,6 @@ double	get_hor_travel(t_cdata *data,
 	ray_pos.y = (int)data->p_pos.y - 0.000001;
 	if (cossin_a.y > 0)
 	{
-		*raydir = SOUTH;
 		ray_pos.y = (int)data->p_pos.y + 1;
 		values.y = 1;
 	}
@@ -51,7 +52,8 @@ double	get_hor_travel(t_cdata *data,
 	{
 		if (check_ray_to_map_collision(data->map, data->map_size,
 				(t_vec2){ray_pos.x, ray_pos.y}))
-			return (*raydir = get_raydir_hor(ray_pos, cossin_a.y, data), ray_pos.z);
+			return (*raydir = get_raydir_hor(ray_pos, cossin_a.y, data),
+				ray_pos.z);
 		ray_pos = (t_vec3){ray_pos.x + values.x, ray_pos.y + values.y,
 			ray_pos.z + values.z};
 	}
@@ -65,12 +67,14 @@ int	get_raydir_vert(t_vec3 ray_pos, double cos, t_cdata *data)
 	if (cos > 0)
 	{
 		dir = WEST;
-		data->vert_tex_offset = (int)(ray_pos.y * TEX_RES) % TEX_RES;
+		data->vert_tex_offset = (int)(ray_pos.y * data->img_size)
+			% data->img_size;
 	}
 	if (ray_pos.x > (int)ray_pos.x)
 	{
 		dir = EAST;
-		data->vert_tex_offset = TEX_RES - (int)(ray_pos.y * TEX_RES) % TEX_RES;
+		data->vert_tex_offset = (data->img_size - 1)
+			- (int)(ray_pos.y * data->img_size) % data->img_size;
 	}
 	return (dir);
 }
