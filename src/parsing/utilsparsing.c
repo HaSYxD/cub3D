@@ -58,3 +58,14 @@ int	outmap(const char c)
 		return (1);
 	return (0);
 }
+
+int	check_double(char **file, int i)
+{
+	while (i > 0)
+	{
+		if (ft_checkmap(file[i]) != 0)
+			return (1);
+		i--;
+	}
+	return (0);
+}

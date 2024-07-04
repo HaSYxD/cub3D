@@ -118,6 +118,8 @@ int		ft_textures(t_garb *gc, t_cdata *cdata);
 int		ft_errorarg(char **agv, int ac);
 int		isplayer(const char c);
 int		outmap(const char c);
+int		check_double(char **file, int i);
+int		ft_checkmap(char *file);
 //parsing functions
 
 //int	ft_eparsing(char **agv, t_garb *gc, t_edata *edata);

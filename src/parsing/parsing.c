@@ -30,7 +30,7 @@ int	ft_checkmap(char *file)
 	return (0);
 }
 
-void	ft_splitfile(char **file, t_garb *gc, t_cdata *cdata)
+int	ft_splitfile(char **file, t_garb *gc, t_cdata *cdata)
 {
 	t_count	c;
 
@@ -44,6 +44,8 @@ void	ft_splitfile(char **file, t_garb *gc, t_cdata *cdata)
 			break ;
 		c.i--;
 	}
+	if (check_double(file, c.i) != 0)
+		return (1);
 	cdata->texture = allocate(sizeof(char *) * (c.k - c.i) + 1, gc);
 	c.j = -1;
 	c.k = 0;
@@ -51,6 +53,7 @@ void	ft_splitfile(char **file, t_garb *gc, t_cdata *cdata)
 		cdata->texture[c.j + c.k] = ft_strdup(file[c.j], gc);
 	cdata->texture[c.j + c.k] = NULL;
 	cdata->map = file + c.i + 1;
+	return (0);
 }
 
 int	closemap(char *file)
@@ -88,7 +91,8 @@ int	ft_readfile(char **agv, t_garb *gc, t_cdata *cdata)
 	file = ft_split(line, '\n', gc);
 	if (closemap(file[c.i - 1]) != 0)
 		return (printf("Error\nInvalid map\n"), 1);
-	ft_splitfile(file, gc, cdata);
+	if (ft_splitfile(file, gc, cdata) != 0)
+		return (printf("Error\nDouble map\n"), 1);
 	return (ft_close(1, c.k), 0);
 }
 
