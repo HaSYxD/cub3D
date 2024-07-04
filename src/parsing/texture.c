@@ -6,7 +6,7 @@
 /*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:19:47 by afromont          #+#    #+#             */
-/*   Updated: 2024/06/25 15:10:57 by afromont         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:17:08 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	ft_parsargb(char *str, t_cdata *cdata, int i, t_garb *gc)
 			return (1);
 		if (ft_isdigit(*str))
 			tmp[c.i++] = ft_ptoi(&str);
-		str++;
+		if (*str)
+			str++;
 	}
 	if (tmp[0] <= 255 && tmp[1] <= 255 && tmp[2] <= 255)
 		cdata->map_col[i] = (t_color){254, tmp[0], tmp[1], tmp[2]};
