@@ -6,7 +6,7 @@
 #    By: afromont <afromont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/07 01:04:22 by aliaudet          #+#    #+#              #
-#    Updated: 2024/07/03 16:49:28 by afromont         ###   ########.fr        #
+#    Updated: 2024/07/05 11:06:00 by aliaudet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ $(NAME): ${OBJS} ${OBJSCUB}
 	@cd libs/libft;make
 	@cd libs/minilibx-linux;make
 	${CC} ${OBJS} ${OBJSCUB} -o ${NAME} ${CFLAGS} ${INCLUDES} ${LIBS}
-bonus: ${OBJS} ${OBJSBONUS}
+bonus: clone ${OBJS} ${OBJSBONUS}
 	@cd libs/libft;make bonus
 	@cd libs/minilibx-linux;make
 	${CC} ${OBJS} ${OBJSBONUS} -o ${NAME} ${CFLAGS} ${INCLUDES} ${LIBS}

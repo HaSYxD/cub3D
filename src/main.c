@@ -6,7 +6,7 @@
 /*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 22:39:17 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/07/04 14:35:56 by afromont         ###   ########.fr       */
+/*   Updated: 2024/07/05 11:02:08 by aliaudet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argc, char *argv[])
 	t_cdata		cdata;
 
 	cdata.gc = (t_garb){NULL, 0};
-	if (argc >= 2)
+	if (argc == 2)
 	{
 		if (ft_errorarg(argv, argc) != 0)
 			return (1);

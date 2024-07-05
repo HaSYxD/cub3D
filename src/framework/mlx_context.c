@@ -77,5 +77,6 @@ int	init_mlxctx(t_mlxctx *mlx, int w, int h, char *name)
 			&mlx->frame_buffer.bpp, &mlx->frame_buffer.line_length,
 			&mlx->frame_buffer.endian);
 	mlx_set_font(mlx->mlx, mlx->win, FONT);
+	mlx_mouse_move(mlx->mlx, mlx->win, w / 2, h / 2);
 	return (0);
 }
