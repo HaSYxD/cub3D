@@ -6,7 +6,7 @@
 /*   By: aliaudet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 18:29:03 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/07/02 18:29:05 by aliaudet         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:25:32 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ void	mouse_control(t_cdata *data)
 		update_mouse_pos(data->mlx);
 		if (data->mlx->mouse_position.x > (WIN_W / 2) + 2)
 		{
-			speed = (data->mlx->mouse_position.x - (WIN_W / 2)) * 0.2;
+			speed = (data->mlx->mouse_position.x - (WIN_W / 2)) * 0.1;
 			data->p_angle += speed * data->mlx->frame_time;
 			mlx_mouse_move(data->mlx->mlx, data->mlx->win,
 				WIN_W / 2, WIN_H / 2);
 		}
 		else if (data->mlx->mouse_position.x < (WIN_W / 2) - 2)
 		{
-			speed = ((WIN_W / 2) - data->mlx->mouse_position.x) * 0.2;
+			speed = ((WIN_W / 2) - data->mlx->mouse_position.x) * 0.1;
 			data->p_angle -= speed * data->mlx->frame_time;
 			mlx_mouse_move(data->mlx->mlx, data->mlx->win,
 				WIN_W / 2, WIN_H / 2);

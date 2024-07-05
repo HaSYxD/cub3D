@@ -6,7 +6,7 @@
 /*   By: afromont <afromont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 22:39:17 by aliaudet          #+#    #+#             */
-/*   Updated: 2024/06/21 15:06:09 by afromont         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:35:56 by afromont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,7 @@ int	main(int argc, char *argv[])
 		cdata.mlx = &mlx;
 		run_cub3d(&cdata);
 	}
+	else
+		return (printf("Please enter the .cub file\n"), 1);
 	return (0);
 }
