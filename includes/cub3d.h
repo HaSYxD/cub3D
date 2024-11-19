@@ -19,7 +19,7 @@
 # define WIN_N	"cub3D"
 
 # define DEF_VERT_SHADE	0
-# define DEF_HOR_SHADE	8
+# define DEF_HOR_SHADE	2
 # define RENDER_RES	2
 //------------------------//
 
