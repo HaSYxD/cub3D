@@ -28,13 +28,17 @@ SRC		= src/main.c\
 		  src/framework/collision.c\
 		  src/framework/drawing/drawing.c\
 		  src/framework/drawing/drawing_utils.c\
+		  src/framework/ui/button.c\
+		  src/framework/ui/txt_box.c\
 		  src/framework/math/cub_math.c
 OBJS	= $(SRC:.c=.o)
 
-CUB = src/cub3D/cub3d.c
+CUB = src/cub3D/cub3d.c\
+      src/editor/editor_bonus.c
 OBJSCUB = $(CUB:.c=.o)
 
 SRC_BONUS = src/cub3D/cub3d_bonus.c\
+	    src/editor/editor_bonus.c\
 	    src/framework/monitoring_bonus.c
 OBJSBONUS = $(SRC_BONUS:.c=.o)
 

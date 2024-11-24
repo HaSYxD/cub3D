@@ -33,7 +33,7 @@
 //pre defined colors
 
 # define MAX_TXTBOX_LEN	128
-# define FONT	"-sony-fixed-medium-r-normal--24-230-75-75-c-120-iso8859-1"
+# define FONT	"-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
 //text parameters
 
 enum	e_button_type
@@ -154,12 +154,12 @@ void	image_to_fbuff(t_img *fbuff, t_img *img, t_vec2 size, t_vec2 pos);
 void	print_fps_to_consol(t_mlxctx *mlx);
 //monitoring functions
 
-// t_button	get_button(t_rec body, char *title, int type);
-// void	update_button(t_button *button, int new_state, t_mlxctx *mlx);
-// void	draw_button(t_button button, t_mlxctx *mlx);
-// t_txtbox	get_txtbox(t_rec body, char *title);
-// void	update_txtbox(t_txtbox *txtbox, t_mlxctx *mlx);
-// void	draw_txtbox(t_txtbox txtbox, t_mlxctx *mlx);
+t_button	get_button(t_rec body, char *title, int type);
+void	update_button(t_button *button, int new_state, t_mlxctx *mlx);
+void	draw_button(t_button button, t_mlxctx *mlx);
+t_txtbox	get_txtbox(t_rec body, char *title);
+void	update_txtbox(t_txtbox *txtbox, t_mlxctx *mlx);
+void	draw_txtbox(t_txtbox txtbox, t_mlxctx *mlx);
 //ui functions
 
 int		check_collision_point_rec(t_rec rec, t_vec2 point);
