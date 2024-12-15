@@ -6,7 +6,7 @@
 #    By: afromont <afromont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/07 01:04:22 by aliaudet          #+#    #+#              #
-#    Updated: 2024/07/05 11:06:00 by aliaudet         ###   ########.fr        #
+#    Updated: 2024/12/15 23:46:55 by hasyxd           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ SRC		= src/main.c\
 OBJS	= $(SRC:.c=.o)
 
 CUB = src/cub3D/cub3d.c\
-      src/editor/editor_bonus.c
+      src/editor/editor.c
 OBJSCUB = $(CUB:.c=.o)
 
 SRC_BONUS = src/cub3D/cub3d_bonus.c\
