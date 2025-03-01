@@ -15,17 +15,17 @@ The Makefile will clone and compile the minilibx-linux library in order to run s
 
 ### Installing
 
-The controls are:
- - WASD to move
- - LEFT/RIGHT or the mouse to turn the camera
- - ESCAPE to exit the game
-
 In order to compile the project, run:
 ```
 make
 ```
 
 ### Usage
+
+The controls are:
+ - WASD to move
+ - LEFT/RIGHT or the mouse to turn the camera
+ - ESCAPE to exit the game
 
 To run the project:
 ```
