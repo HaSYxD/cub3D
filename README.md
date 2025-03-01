@@ -96,3 +96,9 @@ C   176, 177 ,  50
 ```
 
 The "maps" directory already contain exemples of invalid and valid maps. Only test.cub and backroom.cub are valid.
+
+### Exemple
+#
+<p align="center">
+  <img src="exemple.png"/>
+</p>
