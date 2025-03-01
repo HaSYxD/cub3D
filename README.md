@@ -12,7 +12,7 @@ Projects dependancies:
  - a C compiler
 
 The Makefile will clone and compile the minilibx-linux library in order to run so make sure to have all the dependancies: https://github.com/42Paris/minilibx-linux 
-
+#
 ### Installing
 
 In order to compile the project, run:
@@ -42,7 +42,7 @@ by modifying the relevent parameters inside "./include/cub3D.h"
 # define RENDER_RES	2
 //------------------------//
 ```
-
+#
 ### Usage
 
 The controls are:
@@ -96,9 +96,8 @@ C   176, 177 ,  50
 ```
 
 The "maps" directory already contain exemples of invalid and valid maps. Only test.cub and backroom.cub are valid.
-
-### Exemple
 #
+### Exemple
 <p align="center">
   <img src="exemple.png"/>
 </p>
