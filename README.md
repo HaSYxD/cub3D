@@ -1,6 +1,6 @@
 # cub3D
 
-cub3D is a project where you have to recreate a raycaster game in the style of wolfeistein3D
+cub3D is a wolfeistein3D-like renderer that use raycasting to render a given map in pseudo 3D
 
 ### Prerequisites
 
