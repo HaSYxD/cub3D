@@ -20,6 +20,29 @@ In order to compile the project, run:
 make
 ```
 
+To support basic Delta Time, run:
+```
+make bonus
+```
+
+You can change parameters like:
+ - Window resolution
+ - Rays resolution
+ - Wall shading
+
+by modifying the relevent parameters inside "./include/cub3D.h"
+```
+//APP SETTINGS------------//
+# define WIN_W	1600
+# define WIN_H	900
+# define WIN_N	"cub3D"
+
+# define DEF_VERT_SHADE	0
+# define DEF_HOR_SHADE	8
+# define RENDER_RES	2
+//------------------------//
+```
+
 ### Usage
 
 The controls are:
