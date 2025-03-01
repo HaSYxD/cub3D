@@ -31,7 +31,7 @@ You can change parameters like:
  - Wall shading
 
 by modifying the relevent parameters inside "./include/cub3D.h"
-```
+```c
 //APP SETTINGS------------//
 # define WIN_W	1600
 # define WIN_H	900
